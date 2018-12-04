@@ -26,4 +26,12 @@ public class DankConnection {
     public void passError() {
         neuronFrom.addError(neuronTo.getError() * weight);
     }
+
+    public void adjustFromError(double learningRate) {
+        weight -= -neuronFrom.getError() * (neuronTo.getActivatedValue() * (1d - neuronTo.getActivatedValue())) * neuronFrom.getActivatedValue() * learningRate;
+    }
+
+    public void adjustFromError() {
+        adjustFromError(1);
+    }
 }

@@ -1,12 +1,14 @@
 package net.dankrushen.danknn;
 
 import net.dankrushen.danknn.danklayers.DankLayer;
+import net.dankrushen.danknn.danklayers.IDankInputLayer;
 import net.dankrushen.danknn.danklayers.IDankOutputLayer;
 
 import java.util.ArrayList;
 
 public class DankNetwork {
     private final ArrayList<DankLayer> layers = new ArrayList<>();
+    public double learningRate = 1;
 
     public DankNetwork(DankLayer... layers) {
         for (DankLayer layer : layers) {
@@ -16,6 +18,14 @@ public class DankNetwork {
 
     public DankLayer[] getLayers() {
         return layers.toArray(new DankLayer[]{});
+    }
+
+    public IDankInputLayer getInputLayer() {
+        return (IDankInputLayer) layers.get(0);
+    }
+
+    public IDankOutputLayer getOutputLayer() {
+        return (IDankOutputLayer) layers.get(layers.size() - 1);
     }
 
     public void resetAllNeurons() {
@@ -39,7 +49,7 @@ public class DankNetwork {
     public double[] runOnInputs(double[] inputs) {
         resetAllNeurons(); // Reset all neurons to 0
 
-        DankNeuron[] inputNeurons = layers.get(0).getNeurons();
+        DankNeuron[] inputNeurons = getInputLayer().getNeurons();
 
         // Set input layer values
         for (int i = 0; i < inputNeurons.length; i++) {
@@ -54,7 +64,7 @@ public class DankNetwork {
         }
 
         // Get output layer
-        DankNeuron[] outputNeurons = layers.get(layers.size() - 1).getNeurons();
+        DankNeuron[] outputNeurons = getOutputLayer().getNeurons();
         double[] outputs = new double[outputNeurons.length];
 
         // Fill outputs values
@@ -65,10 +75,10 @@ public class DankNetwork {
         return outputs;
     }
 
-    public void backpropogate(double[] errors) {
+    public void backpropogate(double[] errors, double learningRate) {
         resetAllNeuronErrors(); // Reset all errors to 0 ()
 
-        DankNeuron[] outputNeurons = layers.get(layers.size() - 1).getNeurons();
+        DankNeuron[] outputNeurons = getOutputLayer().getNeurons();
 
         // Set output layer errors
         for (int i = 0; i < outputNeurons.length; i++) {
@@ -79,8 +89,26 @@ public class DankNetwork {
         for (int i = layers.size() - 2; i > 0; i--) {
             for (DankConnection connection : ((IDankOutputLayer) layers.get(i)).getInputConnections()) {
                 connection.passError();
+                connection.adjustFromError(learningRate);
             }
         }
+    }
+
+    public void backpropogate(double[] errors) {
+        backpropogate(errors, learningRate);
+    }
+
+    public double calculateLoss() {
+        double loss = 0;
+
+        DankNeuron[] outputNeurons = getOutputLayer().getNeurons();
+
+        // Set output layer errors
+        for (int i = 0; i < outputNeurons.length; i++) {
+            loss += lossFunction(outputNeurons[i].getError());
+        }
+
+        return loss;
     }
 
     public static double activationFunction(double neuronVal) {
