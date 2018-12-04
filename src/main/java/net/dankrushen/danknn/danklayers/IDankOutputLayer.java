@@ -4,5 +4,6 @@ import net.dankrushen.danknn.DankConnection;
 
 public interface IDankOutputLayer extends IDankLayer {
     IDankInputLayer getInputLayer();
+
     DankConnection[] getInputConnections();
 }

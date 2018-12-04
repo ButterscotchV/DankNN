@@ -14,15 +14,17 @@ public class DankOutputLayer extends DankLayer implements IDankOutputLayer {
 
         this.inputLayer = inputLayer;
 
+        inputLayer.setOutputLayer(this);
+
         ArrayList<DankConnection> inConnectionsList = new ArrayList<>();
 
         for (DankNeuron externalNeuron : inputLayer.getNeurons()) {
-            for (DankNeuron internalNeuron : neurons) {
+            for (DankNeuron internalNeuron : getNeurons()) {
                 inConnectionsList.add(new DankConnection(externalNeuron, internalNeuron));
             }
         }
 
-        inConnections = inConnectionsList.toArray(new DankConnection[] {});
+        inConnections = inConnectionsList.toArray(new DankConnection[]{});
     }
 
     @Override

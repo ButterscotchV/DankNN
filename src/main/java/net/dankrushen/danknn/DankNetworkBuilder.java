@@ -20,7 +20,7 @@ public class DankNetworkBuilder {
         if (builtNetwork == null) {
             layers.add(new DankOutputLayer(outputNeuronCount, (IDankInputLayer) layers.get(layers.size() - 1)));
 
-            builtNetwork = new DankNetwork(layers.toArray(new DankLayer[] {}));
+            builtNetwork = new DankNetwork(layers.toArray(new DankLayer[]{}));
         }
 
         return builtNetwork;

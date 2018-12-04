@@ -4,12 +4,42 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 public class DankNN {
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         try {
-            DankNN dankNN = new DankNN();
+            //DankNN dankNN = new DankNN();
+
+            DankNetworkBuilder builder = new DankNetworkBuilder(1);
+
+            builder.addLayer(1);
+
+            DankNetwork network = builder.buildNetwork(1);
+        	
+        	/*
+        	int connections = 0;
+        	
+        	for (DankLayer layer : network.getLayers()) {
+        		if (layer instanceof IDankInputLayer)
+        			connections += ((IDankInputLayer)layer).getOutputConnections().length;
+        	}
+        	
+            System.out.println("There are " + connections + " connections in the network.");
+            */
+
+            double[] output = network.runOnInputs(new double[]{2.5});
+            System.out.println(doubleArrayToString(output));
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static String doubleArrayToString(double[] array) {
+        String outputString = "";
+
+        for (int i = 0; i < array.length; i++) {
+            outputString += (i == 0 ? "" : ", ") + array[i];
+        }
+
+        return "[" + outputString + "]";
     }
 
     public DankNN() {
@@ -41,9 +71,9 @@ public class DankNN {
             double in = (i % (expectedInOut.length / 2)) + 1;
             boolean multiply = i >= (expectedInOut.length / 2);
 
-            expectedInOut[i] = new double[][] {
-                    new double[] {in, (multiply ? in * 2d : in / 2d)},
-                    new double[] {(multiply ? 1 : 0), (multiply ? 0 : 1)}
+            expectedInOut[i] = new double[][]{
+                    new double[]{in, (multiply ? in * 2d : in / 2d)},
+                    new double[]{(multiply ? 1 : 0), (multiply ? 0 : 1)}
             };
         }
 
@@ -63,7 +93,7 @@ public class DankNN {
 
         double learningRate = 1;
 
-        while(epochs < 10) {
+        while (epochs < 10) {
             epochLoss = 0;
 
             for (double[][] expectedOuts : shuffleData(expectedInOut)) {
@@ -176,8 +206,7 @@ public class DankNN {
 
         Random rng = new Random();
         int n = dataShuffled.length;
-        while (n > 1)
-        {
+        while (n > 1) {
             n--;
             int k = rng.nextInt(n + 1);
             double[][] value = dataShuffled[k];
