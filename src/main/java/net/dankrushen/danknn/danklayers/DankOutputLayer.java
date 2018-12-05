@@ -7,11 +7,24 @@ import java.util.ArrayList;
 
 public class DankOutputLayer extends DankLayer implements IDankOutputLayer {
     private IDankInputLayer inputLayer;
-    private final DankConnection[] inConnections;
+    private DankConnection[] inConnections;
+    private double bias = 0;
+
+    public DankOutputLayer(int numNeurons, double bias, IDankInputLayer inputLayer) {
+        super(numNeurons);
+
+        this.bias = bias;
+
+        init(inputLayer);
+    }
 
     public DankOutputLayer(int numNeurons, IDankInputLayer inputLayer) {
         super(numNeurons);
 
+        init(inputLayer);
+    }
+
+    public void init(IDankInputLayer inputLayer) {
         this.inputLayer = inputLayer;
 
         inputLayer.setOutputLayer(this);
@@ -35,5 +48,10 @@ public class DankOutputLayer extends DankLayer implements IDankOutputLayer {
     @Override
     public DankConnection[] getInputConnections() {
         return inConnections;
+    }
+
+    @Override
+    public double getBias() {
+        return bias;
     }
 }

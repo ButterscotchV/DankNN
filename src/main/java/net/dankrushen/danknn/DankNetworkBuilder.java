@@ -12,17 +12,25 @@ public class DankNetworkBuilder {
         layers.add(new DankInputLayer(inputNeuronCount)); // Begin layers
     }
 
-    public void addLayer(int numNeurons) {
-        layers.add(new DankFullyConnectedLayer(numNeurons, (IDankInputLayer) layers.get(layers.size() - 1)));
+    public void addLayer(int numNeurons, double bias) {
+        layers.add(new DankFullyConnectedLayer(numNeurons, bias, (IDankInputLayer) layers.get(layers.size() - 1)));
     }
 
-    public DankNetwork buildNetwork(int outputNeuronCount) {
+    public void addLayer(int numNeurons) {
+        addLayer(numNeurons, 0);
+    }
+
+    public DankNetwork buildNetwork(int outputNeuronCount, double bias) {
         if (builtNetwork == null) {
-            layers.add(new DankOutputLayer(outputNeuronCount, (IDankInputLayer) layers.get(layers.size() - 1)));
+            layers.add(new DankOutputLayer(outputNeuronCount, bias, (IDankInputLayer) layers.get(layers.size() - 1)));
 
             builtNetwork = new DankNetwork(layers.toArray(new DankLayer[]{}));
         }
 
         return builtNetwork;
+    }
+
+    public DankNetwork buildNetwork(int outputNeuronCount) {
+        return buildNetwork(outputNeuronCount, 0);
     }
 }

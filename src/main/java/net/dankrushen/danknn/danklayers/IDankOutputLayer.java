@@ -6,4 +6,6 @@ public interface IDankOutputLayer extends IDankLayer {
     IDankInputLayer getInputLayer();
 
     DankConnection[] getInputConnections();
+
+    double getBias();
 }

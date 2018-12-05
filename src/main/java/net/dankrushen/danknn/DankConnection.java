@@ -6,7 +6,7 @@ public class DankConnection {
     DankNeuron neuronFrom;
     DankNeuron neuronTo;
 
-    double weight = 1;
+    double weight = 0;
 
     public DankConnection(DankNeuron neuronFrom, DankNeuron neuronTo, double initWeight) {
         this.neuronFrom = neuronFrom;
@@ -21,14 +21,15 @@ public class DankConnection {
 
     public void passValue() {
         neuronTo.addValue((neuronFrom.getParentLayer() instanceof DankInputLayer ? neuronFrom.getValue() : neuronFrom.getActivatedValue()) * weight);
+        //System.out.println("Passed through value of " + ((neuronFrom.getParentLayer() instanceof DankInputLayer ? neuronFrom.getValue() : neuronFrom.getActivatedValue()) * weight) + " from " + neuronFrom.getValue() + " with " + weight);
     }
 
     public void passError() {
-        neuronFrom.addError(neuronTo.getError() * weight);
+        neuronFrom.addError(weight * neuronTo.getError() * (neuronTo.getActivatedValue() * (1d - neuronTo.getActivatedValue())));
     }
 
     public void adjustFromError(double learningRate) {
-        weight -= -neuronFrom.getError() * (neuronTo.getActivatedValue() * (1d - neuronTo.getActivatedValue())) * neuronFrom.getActivatedValue() * learningRate;
+        weight += neuronTo.getError() * (neuronTo.getActivatedValue() * (1d - neuronTo.getActivatedValue())) * neuronFrom.getActivatedValue() * learningRate;
     }
 
     public void adjustFromError() {

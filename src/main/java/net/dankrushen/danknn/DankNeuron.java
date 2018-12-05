@@ -1,24 +1,19 @@
 package net.dankrushen.danknn;
 
 import net.dankrushen.danknn.danklayers.DankLayer;
+import net.dankrushen.danknn.danklayers.IDankOutputLayer;
 
 public class DankNeuron {
     private final DankLayer parentLayer;
 
     private double value;
+    private double activatedValue;
     private double error;
 
     public DankNeuron(DankLayer parentLayer) {
         this.parentLayer = parentLayer;
 
         reset();
-    }
-
-    public DankNeuron(DankLayer parentLayer, double value) {
-        this.parentLayer = parentLayer;
-
-        reset();
-        this.value = value;
     }
 
     public DankLayer getParentLayer() {
@@ -31,23 +26,24 @@ public class DankNeuron {
     }
 
     public double getValue() {
-        return value;
+        return value + getBias();
     }
 
     public double getActivatedValue() {
-        return DankNetwork.activationFunction(value);
+        return activatedValue;
     }
 
     public void setValue(double value) {
         this.value = value;
+        this.activatedValue = DankNetwork.activationFunction(value + getBias());
     }
 
     public void addValue(double value) {
-        this.value += value;
+        setValue(this.value + value);
     }
 
     public void subValue(double value) {
-        this.value -= value;
+        setValue(this.value - value);
     }
 
     public double getError() {
@@ -64,5 +60,9 @@ public class DankNeuron {
 
     public void subError(double error) {
         this.error -= error;
+    }
+
+    public double getBias() {
+        return parentLayer instanceof IDankOutputLayer ? ((IDankOutputLayer) parentLayer).getBias() : 0;
     }
 }
