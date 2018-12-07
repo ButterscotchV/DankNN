@@ -9,23 +9,10 @@ public class DankFullyConnectedLayer extends DankLayer implements IDankConnected
     private IDankInputLayer inputLayer;
     private DankConnection[] inConnections;
     private IDankOutputLayer outputLayer;
-    private double bias = 0;
-
-    public DankFullyConnectedLayer(int numNeurons, double bias, IDankInputLayer inputLayer) {
-        super(numNeurons);
-
-        this.bias = bias;
-
-        init(inputLayer);
-    }
 
     public DankFullyConnectedLayer(int numNeurons, IDankInputLayer inputLayer) {
         super(numNeurons);
 
-        init(inputLayer);
-    }
-
-    private void init(IDankInputLayer inputLayer) {
         this.inputLayer = inputLayer;
 
         inputLayer.setOutputLayer(this);
@@ -64,10 +51,5 @@ public class DankFullyConnectedLayer extends DankLayer implements IDankConnected
     @Override
     public DankConnection[] getOutputConnections() {
         return outputLayer.getInputConnections();
-    }
-
-    @Override
-    public double getBias() {
-        return bias;
     }
 }

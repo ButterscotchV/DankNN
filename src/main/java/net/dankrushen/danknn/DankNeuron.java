@@ -1,14 +1,15 @@
 package net.dankrushen.danknn;
 
 import net.dankrushen.danknn.danklayers.DankLayer;
-import net.dankrushen.danknn.danklayers.IDankOutputLayer;
 
 public class DankNeuron {
     private final DankLayer parentLayer;
 
     private double value;
     private double activatedValue;
+    private double bias;
     private double error;
+    private int iters;
 
     public DankNeuron(DankLayer parentLayer) {
         this.parentLayer = parentLayer;
@@ -22,11 +23,13 @@ public class DankNeuron {
 
     public void reset() {
         value = 0;
+        bias = 0;
         error = 0;
+        iters = 0;
     }
 
     public double getValue() {
-        return value + getBias();
+        return value + bias;
     }
 
     public double getActivatedValue() {
@@ -35,7 +38,7 @@ public class DankNeuron {
 
     public void setValue(double value) {
         this.value = value;
-        this.activatedValue = DankNetwork.activationFunction(value + getBias());
+        this.activatedValue = DankNetwork.activationFunction(getValue());
     }
 
     public void addValue(double value) {
@@ -44,6 +47,22 @@ public class DankNeuron {
 
     public void subValue(double value) {
         setValue(this.value - value);
+    }
+
+    public double getBias() {
+        return bias;
+    }
+
+    public void setBias(double bias) {
+        this.bias = bias;
+    }
+
+    public void addBias(double bias) {
+        this.bias += bias;
+    }
+
+    public void subBias(double bias) {
+        this.bias -= bias;
     }
 
     public double getError() {
@@ -62,7 +81,19 @@ public class DankNeuron {
         this.error -= error;
     }
 
-    public double getBias() {
-        return parentLayer instanceof IDankOutputLayer ? ((IDankOutputLayer) parentLayer).getBias() : 0;
+    public int getIters() {
+        return iters;
+    }
+
+    public void setIters(int iters) {
+        this.iters = iters;
+    }
+
+    public void addIters(double iters) {
+        this.iters += iters;
+    }
+
+    public void subIters(double iters) {
+        this.iters -= iters;
     }
 }

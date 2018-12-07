@@ -1,5 +1,6 @@
 package net.dankrushen.danknn;
 
+import net.dankrushen.danknn.danklayers.DankLayer;
 import net.dankrushen.danknn.danklayers.IDankOutputLayer;
 
 import java.text.DecimalFormat;
@@ -44,7 +45,8 @@ public class DankNN {
 
         DankNetwork network = networkBuilder.buildNetwork(1);
 
-        DankConnection[] connections1 = ((IDankOutputLayer) network.getLayers()[1]).getInputConnections();
+        IDankOutputLayer layer1 = (IDankOutputLayer) network.getLayers()[1];
+        DankConnection[] connections1 = layer1.getInputConnections();
 
         connections1[0].weight = 0.8;
         connections1[1].weight = 0.4;
@@ -53,7 +55,8 @@ public class DankNN {
         connections1[4].weight = 0.9;
         connections1[5].weight = 0.5;
 
-        DankConnection[] connections2 = ((IDankOutputLayer) network.getLayers()[2]).getInputConnections();
+        IDankOutputLayer layer2 = (IDankOutputLayer) network.getLayers()[2];
+        DankConnection[] connections2 = layer2.getInputConnections();
 
         connections2[0].weight = 0.3;
         connections2[1].weight = 0.5;
@@ -63,7 +66,7 @@ public class DankNN {
 
         System.out.println("Output Num: " + output);
 
-        network.backpropogate(new double[]{0 - output});
+        network.backpropagate(new double[]{0 - output});
 
         output = network.runOnInputs(new double[]{1, 1})[0];
 
@@ -73,18 +76,24 @@ public class DankNN {
     public static void testOnExample2() {
         DankNetworkBuilder networkBuilder = new DankNetworkBuilder(2);
 
-        networkBuilder.addLayer(2, 0.35);
+        networkBuilder.addLayer(2);
 
-        DankNetwork network = networkBuilder.buildNetwork(2, 0.60);
+        DankNetwork network = networkBuilder.buildNetwork(2);
 
-        DankConnection[] connections1 = ((IDankOutputLayer) network.getLayers()[1]).getInputConnections();
+        IDankOutputLayer layer1 = (IDankOutputLayer) network.getLayers()[1];
+        DankConnection[] connections1 = layer1.getInputConnections();
+
+        layer1.setBias(0.35);
 
         connections1[0].weight = 0.15;
         connections1[1].weight = 0.25;
         connections1[2].weight = 0.20;
         connections1[3].weight = 0.30;
 
-        DankConnection[] connections2 = ((IDankOutputLayer) network.getLayers()[2]).getInputConnections();
+        IDankOutputLayer layer2 = (IDankOutputLayer) network.getLayers()[2];
+        DankConnection[] connections2 = layer2.getInputConnections();
+
+        layer2.setBias(0.6);
 
         connections2[0].weight = 0.40;
         connections2[1].weight = 0.50;
@@ -98,11 +107,23 @@ public class DankNN {
 
         System.out.println("Output Nums: " + outputs[0] + ", " + outputs[1]);
 
-        network.backpropogate(new double[]{0.01 - outputs[0], 0.99 - outputs[1]});
+        network.backpropagate(new double[]{0.01 - outputs[0], 0.99 - outputs[1]});
 
         outputs = network.runOnInputs(new double[]{0.05, 0.10});
 
         System.out.println("Output Nums: " + outputs[0] + ", " + outputs[1]);
+
+        for (int i = 0; i < 9999; i++) {
+            outputs = network.runOnInputs(new double[]{0.05, 0.10});
+
+            System.out.println("h1: " + network.getLayers()[1].getNeurons()[0].getValue());
+
+            System.out.println("Output Nums: " + outputs[0] + ", " + outputs[1]);
+
+            network.backpropagate(new double[]{0.01 - outputs[0], 0.99 - outputs[1]});
+
+            System.out.println("Loss: " + network.calculateLoss());
+        }
     }
 
     public static String doubleArrayToString(double[] array) {
@@ -119,28 +140,42 @@ public class DankNN {
         DankNetworkBuilder networkBuilder = new DankNetworkBuilder(2);
 
         networkBuilder.addLayer(4);
-        networkBuilder.addLayer(4);
-        networkBuilder.addLayer(4);
-        networkBuilder.addLayer(4);
-        networkBuilder.addLayer(4);
-        networkBuilder.addLayer(4);
-        networkBuilder.addLayer(4);
-        networkBuilder.addLayer(4);
+        networkBuilder.addLayer(2);
 
-        DankNetwork network = networkBuilder.buildNetwork(2);
+        DankNetwork network = networkBuilder.buildNetwork(1);
 
         int trainingSetLength = 100000;
         double[][][] expectedInOuts = new double[trainingSetLength][][];
 
-        for (int i = 0; i < expectedInOuts.length; i++) {
-            double in = (i % (expectedInOuts.length / 2)) + 1;
-            boolean multiply = i >= (expectedInOuts.length / 2);
+        System.out.println("Generating dataset with " + trainingSetLength + " points...");
 
-            expectedInOuts[i] = new double[][]{
-                    new double[]{in, (multiply ? in * 2d : in / 2d)},
-                    new double[]{(multiply ? 1 : 0), (multiply ? 0 : 1)}
-            };
+        Random rng = new Random();
+        for (int i = 0; i < expectedInOuts.length; i++) {
+            boolean positive = i >= (expectedInOuts.length / 2);
+            boolean matches = false;
+
+            while (!matches) {
+                double x = (rng.nextDouble() * 11) - 5.5;
+                double y = (rng.nextDouble() * 11) - 5.5;
+
+                double dist = pythagoreanTheorum(x, y);
+
+                matches = (positive ? dist <= 2.5 : dist >= 3.5);
+
+                if (matches) {
+                    expectedInOuts[i] = new double[][]{
+                            new double[]{x, y},
+                            new double[]{positive ? 1 : -1}
+                    };
+
+                    System.out.println((positive ? "Positive" : "Negative") + " point at (" + x + ", " + y + ")");
+                }
+            }
         }
+
+        System.out.println("Dataset generated!");
+
+        System.out.println();
 
         double loss = 1;
         double epochLoss = 1;
@@ -153,9 +188,9 @@ public class DankNN {
 
         double timeDivisor = 1000000000;
 
-        double learningRate = 1;
+        double learningRate = 0.03;
 
-        while (epochs < 10) {
+        while (epochs < 1000) {
             epochLoss = 0;
 
             for (double[][] expectedInOut : shuffleData(expectedInOuts)) {
@@ -166,7 +201,7 @@ public class DankNN {
                     errors[i] = expectedInOut[1][i] - outputs[i];
                 }
 
-                loss = network.backpropogate(errors, learningRate);
+                loss = network.backpropagate(errors, learningRate);
                 epochLoss += loss;
 
                 epochIters++;
@@ -175,8 +210,8 @@ public class DankNN {
                 long deltaTime = curTime - lastTime;
                 lastTime = curTime;
 
-                if (epochIters % 100 == 0 || epochIters >= expectedInOuts.length) {
-                    if (false) { // Debugging actual network
+                if (epochIters % 500 == 0 || epochIters >= expectedInOuts.length) {
+                    if (true) { // Debugging actual network
                         DecimalFormat f = new DecimalFormat("0.000");
                         String spaces = makeSpaces(5);
 
@@ -184,6 +219,16 @@ public class DankNN {
                         //System.out.println(spaces + "\\" + f.format(weight12) + " | " + spaces + "\\" + f.format(weight32) + " | " + spaces);
                         //System.out.println(spaces + "/" + f.format(weight21) + " | " + spaces + "/" + f.format(weight41) + " | " + spaces);
                         //System.out.println(f.format(neuron12) + " " + f.format(weight22) + " | " + f.format(neuron22) + " " + f.format(weight42) + " | " + f.format(neuron32));
+
+                        System.out.println();
+                        for (DankLayer layer : network.getLayers()) {
+                            if (layer instanceof IDankOutputLayer) {
+                                for (DankConnection connection : ((IDankOutputLayer) layer).getInputConnections()) {
+                                    System.out.print(connection.weight + " ");
+                                }
+                                System.out.println();
+                            }
+                        }
                     }
 
                     System.out.println("Iters = " + epochIters + "/" + expectedInOuts.length + ", Epochs = " + epochs + ", Loss = " + loss + ", Time/Iter = " + (deltaTime / timeDivisor) + ", Total Time = " + ((curTime - initTime) / timeDivisor));
@@ -194,36 +239,22 @@ public class DankNN {
             epochLoss /= epochIters;
             epochIters = 0;
 
-            learningRate *= 5;
+            //learningRate *= 0.985;
 
             System.out.println("Epoch Loss = " + epochLoss);
             System.out.println();
         }
 
-        double[] outputs = network.runOnInputs(new double[]{5, 10});
+        double[] inputs = new double[]{-0.6584706016718167, -0.17883548346504163};
+        double[] outputs = network.runOnInputs(inputs);
 
-        System.out.println("Multiplied by 2: " + (outputs[0] * 100) + "%");
-        System.out.println("Divided by 2: " + (outputs[1] * 100) + "%");
+        System.out.println("Point: (" + inputs[0] + ", " + inputs[1] + ")");
+        System.out.println("Group (+1 or -1): " + outputs[0]);
+        System.out.println();
     }
 
-    public static double activation(double netNeuron) {
-        return 1d / (1d + Math.exp(-netNeuron));
-    }
-
-    public static double lossFunction(double error) {
-        return 0.5 * Math.pow(error, 2);
-    }
-
-    public static double errorFunction(double predicted, double expected) {
-        return expected - predicted;
-    }
-
-    public static double weightLoss(double error, double neuronFrom, double neuronTo, double learningRate) {
-        return hiddenWeightLoss(error, 1, 1, 0, neuronFrom, neuronTo, learningRate);
-    }
-
-    public static double hiddenWeightLoss(double error1, double weight1, double error2, double weight2, double neuronFrom, double neuronTo, double learningRate) {
-        return ((-error1 * weight1) + (-error2 * weight2)) * (neuronTo * (1d - neuronTo)) * neuronFrom * learningRate;
+    public double pythagoreanTheorum(double a, double b) {
+        return Math.sqrt((a * a) + (b * b));
     }
 
     public static String makeSpaces(int spaces) {

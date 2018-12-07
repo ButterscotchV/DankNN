@@ -17,4 +17,11 @@ public abstract class DankLayer implements IDankLayer {
     public DankNeuron[] getNeurons() {
         return neurons;
     }
+
+    @Override
+    public void setBias(double bias) {
+        for (DankNeuron neuron : getNeurons()) {
+            neuron.setBias(bias);
+        }
+    }
 }

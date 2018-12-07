@@ -37,15 +37,6 @@ public class DankNetwork {
         }
     }
 
-    public void resetAllNeuronErrors() {
-        // Loop through every layer & set neuron error to 0
-        for (DankLayer layer : layers) {
-            for (DankNeuron neuron : layer.getNeurons()) {
-                neuron.setError(0);
-            }
-        }
-    }
-
     public double[] runOnInputs(double[] inputs) {
         resetAllNeurons(); // Reset all neurons to 0
 
@@ -75,9 +66,7 @@ public class DankNetwork {
         return outputs;
     }
 
-    public double backpropogate(double[] errors, double learningRate) {
-        resetAllNeuronErrors(); // Reset all errors to 0 ()
-
+    public double backpropagate(double[] errors, double learningRate) {
         DankNeuron[] outputNeurons = getOutputLayer().getNeurons();
 
         // Set output layer errors
@@ -96,8 +85,8 @@ public class DankNetwork {
         return calculateLoss();
     }
 
-    public double backpropogate(double[] errors) {
-        return backpropogate(errors, learningRate);
+    public double backpropagate(double[] errors) {
+        return backpropagate(errors, learningRate);
     }
 
     public double calculateLoss() {
@@ -116,8 +105,14 @@ public class DankNetwork {
     public static double activationFunction(double neuronVal) {
         return 1d / (1d + Math.exp(-neuronVal));
     }
+    public static double derivActivationFunction(double neuronVal) {
+        return neuronVal * (1d - neuronVal);
+    }
 
     public static double lossFunction(double errorVal) {
         return (errorVal * errorVal) / 2d;
+    }
+    public static double derivLossFunction(double errorVal) {
+        return -(errorVal);
     }
 }
