@@ -3,8 +3,13 @@ package net.dankrushen.danknn;
 import net.dankrushen.danknn.danklayers.DankLayer;
 import net.dankrushen.danknn.danklayers.IDankOutputLayer;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
 
 public class DankNN {
     public static void main(String[] args) {
@@ -143,6 +148,19 @@ public class DankNN {
         networkBuilder.addLayer(2);
 
         DankNetwork network = networkBuilder.buildNetwork(1);
+        
+        DankNetworkVisualizer visualizer = new DankNetworkVisualizer(network);
+
+        visualizer.imageGrid.setAutoSpacingType(DankImageGrid.AutoSpacingType.SQUARE_PLUS_PERCENT);
+        visualizer.imageGrid.setExtraAutoSpacingPercent(15);
+
+        BufferedImage image = visualizer.drawImage();
+        
+        try {
+			ImageIO.write(image, "png", new File("D:\\Documents\\image.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
         int trainingSetLength = 100000;
         double[][][] expectedInOuts = new double[trainingSetLength][][];
@@ -221,12 +239,22 @@ public class DankNN {
                         //System.out.println(f.format(neuron12) + " " + f.format(weight22) + " | " + f.format(neuron22) + " " + f.format(weight42) + " | " + f.format(neuron32));
 
                         System.out.println();
+                        int layerNum = 1;
                         for (DankLayer layer : network.getLayers()) {
                             if (layer instanceof IDankOutputLayer) {
+                                System.out.print(layerNum + " to " + (layerNum + 1) + " weights: ");
                                 for (DankConnection connection : ((IDankOutputLayer) layer).getInputConnections()) {
                                     System.out.print(connection.weight + " ");
                                 }
                                 System.out.println();
+
+                                System.out.print((layerNum + 1) + " biases: ");
+                                for (DankNeuron neuron : layer.getNeurons()) {
+                                    System.out.print(neuron.getBias() + " ");
+                                }
+                                System.out.println();
+
+                                layerNum++;
                             }
                         }
                     }
