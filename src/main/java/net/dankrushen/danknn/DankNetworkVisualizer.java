@@ -5,6 +5,7 @@ import net.dankrushen.danknn.danklayers.DankInputLayer;
 import net.dankrushen.danknn.danklayers.DankLayer;
 import net.dankrushen.danknn.danklayers.IDankOutputLayer;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
@@ -16,6 +17,9 @@ public class DankNetworkVisualizer {
 
     private DankNetwork network;
 
+    private JFrame displayWindow;
+    private JLabel imageDisplay;
+
     public DankNetworkVisualizer(DankNetwork network) {
         this.network = network;
         this.imageGrid = new DankImageGrid();
@@ -24,6 +28,53 @@ public class DankNetworkVisualizer {
     public DankNetworkVisualizer(DankNetwork network, int width, int height) {
         this.network = network;
         this.imageGrid = new DankImageGrid(width, height);
+    }
+
+    public void setDisplayEnabled(boolean enable) {
+        if (enable) {
+            if (displayWindow == null)
+                displayWindow = new JFrame();
+
+            if (imageDisplay == null)
+                imageDisplay = new JLabel();
+
+            if (!frameContainsComponent(displayWindow, imageDisplay))
+                displayWindow.add(imageDisplay);
+
+            displayWindow.pack();
+            displayWindow.setVisible(true);
+        } else {
+            if (displayWindow != null)
+                displayWindow.setVisible(false);
+        }
+    }
+
+    public void setDisplayExitBehaviour(int exitBehaviour) {
+        if (displayWindow != null)
+            displayWindow.setDefaultCloseOperation(exitBehaviour);
+    }
+
+    public void centerDisplay() {
+        if (displayWindow != null)
+            displayWindow.setLocationRelativeTo(null);
+    }
+
+    public void destroyDisplay() {
+        if (displayWindow != null) {
+            displayWindow.dispose();
+            displayWindow = null;
+        }
+
+        if (imageDisplay != null)
+            imageDisplay = null;
+    }
+
+    private boolean frameContainsComponent(JFrame frame, Component component) {
+        for (Component frameComponent : displayWindow.getComponents())
+            if (frameComponent == component)
+                return true;
+
+        return false;
     }
 
     public BufferedImage drawImage() {
@@ -52,7 +103,6 @@ public class DankNetworkVisualizer {
 
             for (int y = 0; y < imageGrid.getRows(); y++) {
                 DankDrawSpace drawSpace = imageGrid.getDrawSpaceAt(x, y);
-
                 graphics.setClip(drawSpace);
 
                 // Draw neuron layer every even x column
@@ -60,7 +110,7 @@ public class DankNetworkVisualizer {
                     DankLayer layer = network.getLayers()[x / 2];
 
                     if (y < layer.getNeurons().length) {
-                        System.out.println("Neuron Draw Area: " + drawSpace);
+                        // System.out.println("Neuron Draw Area: " + drawSpace); // Spacing debug
 
                         DankNeuron neuron = layer.getNeurons()[y];
 
@@ -99,6 +149,13 @@ public class DankNetworkVisualizer {
         imageGrid.drawGridLines(graphics);
 
         graphics.dispose();
+
+        if (imageDisplay != null) {
+            imageDisplay.setIcon(new ImageIcon(image));
+
+            if (displayWindow != null)
+                displayWindow.pack();
+        }
 
         return image;
     }

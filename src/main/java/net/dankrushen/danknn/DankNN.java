@@ -4,6 +4,7 @@ import net.dankrushen.danknn.danklayers.DankLayer;
 import net.dankrushen.danknn.danklayers.IDankOutputLayer;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -161,7 +162,11 @@ public class DankNN {
         visualizer.imageGrid.setAutoSpacingType(DankImageGrid.AutoSpacingType.SQUARE_PLUS_PERCENT);
         visualizer.imageGrid.setExtraAutoSpacingPercent(15);
 
-        saveImage(visualizer.drawImage());
+        //saveImage(visualizer.drawImage());
+        visualizer.setDisplayEnabled(true);
+        visualizer.setDisplayExitBehaviour(JFrame.EXIT_ON_CLOSE);
+        visualizer.drawImage();
+        visualizer.centerDisplay();
 
         int trainingSetLength = 100000;
         double[][][] expectedInOuts = new double[trainingSetLength][][];
@@ -177,7 +182,7 @@ public class DankNN {
                 double x = (rng.nextDouble() * 11) - 5.5;
                 double y = (rng.nextDouble() * 11) - 5.5;
 
-                double dist = pythagoreanTheorum(x, y);
+                double dist = pythagoreanTheorem(x, y);
 
                 matches = (positive ? dist <= 2.5 : dist >= 3.5);
 
@@ -230,7 +235,7 @@ public class DankNN {
                 lastTime = curTime;
 
                 if (epochIters % 500 == 0 || epochIters >= expectedInOuts.length) {
-                    if (true) { // Debugging actual network
+                    if (false) { // Debugging actual network
                         DecimalFormat f = new DecimalFormat("0.000");
                         String spaces = makeSpaces(5);
 
@@ -260,10 +265,6 @@ public class DankNN {
                         }
                     }
 
-                    saveImage(visualizer.drawImage());
-
-                    System.exit(0);
-
                     System.out.println("Iters = " + epochIters + "/" + expectedInOuts.length + ", Epochs = " + epochs + ", Loss = " + loss + ", Time/Iter = " + (deltaTime / timeDivisor) + ", Total Time = " + ((curTime - initTime) / timeDivisor));
                 }
             }
@@ -273,6 +274,9 @@ public class DankNN {
             epochIters = 0;
 
             //learningRate *= 0.985;
+
+            //saveImage(visualizer.drawImage());
+            visualizer.drawImage();
 
             System.out.println("Epoch Loss = " + epochLoss);
             System.out.println();
@@ -286,7 +290,7 @@ public class DankNN {
         System.out.println();
     }
 
-    public double pythagoreanTheorum(double a, double b) {
+    public double pythagoreanTheorem(double a, double b) {
         return Math.sqrt((a * a) + (b * b));
     }
 
