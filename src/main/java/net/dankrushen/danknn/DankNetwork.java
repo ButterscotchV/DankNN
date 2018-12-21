@@ -105,6 +105,7 @@ public class DankNetwork {
     public static double activationFunction(double neuronVal) {
         return 1d / (1d + Math.exp(-neuronVal));
     }
+
     public static double derivActivationFunction(double neuronVal) {
         return neuronVal * (1d - neuronVal);
     }
@@ -112,6 +113,7 @@ public class DankNetwork {
     public static double lossFunction(double errorVal) {
         return (errorVal * errorVal) / 2d;
     }
+
     public static double derivLossFunction(double errorVal) {
         return -(errorVal);
     }

@@ -3,13 +3,12 @@ package net.dankrushen.danknn;
 import net.dankrushen.danknn.danklayers.DankLayer;
 import net.dankrushen.danknn.danklayers.IDankOutputLayer;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Random;
-
-import javax.imageio.ImageIO;
 
 public class DankNN {
     public static void main(String[] args) {
@@ -141,6 +140,14 @@ public class DankNN {
         return "[" + outputString + "]";
     }
 
+    public static void saveImage(BufferedImage image) {
+        try {
+            ImageIO.write(image, "png", new File("D:\\Documents\\image.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public DankNN() {
         DankNetworkBuilder networkBuilder = new DankNetworkBuilder(2);
 
@@ -148,19 +155,13 @@ public class DankNN {
         networkBuilder.addLayer(2);
 
         DankNetwork network = networkBuilder.buildNetwork(1);
-        
-        DankNetworkVisualizer visualizer = new DankNetworkVisualizer(network);
+
+        DankNetworkVisualizer visualizer = new DankNetworkVisualizer(network, 1280, 720);
 
         visualizer.imageGrid.setAutoSpacingType(DankImageGrid.AutoSpacingType.SQUARE_PLUS_PERCENT);
         visualizer.imageGrid.setExtraAutoSpacingPercent(15);
 
-        BufferedImage image = visualizer.drawImage();
-        
-        try {
-			ImageIO.write(image, "png", new File("D:\\Documents\\image.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        saveImage(visualizer.drawImage());
 
         int trainingSetLength = 100000;
         double[][][] expectedInOuts = new double[trainingSetLength][][];
@@ -258,6 +259,10 @@ public class DankNN {
                             }
                         }
                     }
+
+                    saveImage(visualizer.drawImage());
+
+                    System.exit(0);
 
                     System.out.println("Iters = " + epochIters + "/" + expectedInOuts.length + ", Epochs = " + epochs + ", Loss = " + loss + ", Time/Iter = " + (deltaTime / timeDivisor) + ", Total Time = " + ((curTime - initTime) / timeDivisor));
                 }

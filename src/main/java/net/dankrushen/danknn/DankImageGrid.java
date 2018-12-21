@@ -1,6 +1,8 @@
 package net.dankrushen.danknn;
 
-public class DankImageGrid {
+import java.awt.*;
+
+public class DankImageGrid implements Cloneable {
     private int width = 1280;
     private int height = 720;
 
@@ -96,7 +98,7 @@ public class DankImageGrid {
     }
 
     public DankSpacing getAutoSpacing() {
-        switch(getAutoSpacingType()) {
+        switch (getAutoSpacingType()) {
             case NONE:
                 return new DankSpacing(getColumnSpacing(), getRowSpacing());
             case SQUARE:
@@ -119,7 +121,7 @@ public class DankImageGrid {
     }
 
     public void setColumnSpacingPercent(double columnSpacingPercent) {
-        setColumnSpacing((int)Math.round((((double)getPixelsPerColumn()) * (columnSpacingPercent / 100d)/2d)));
+        setColumnSpacing((int) Math.round((((double) getPixelsPerColumn()) * (columnSpacingPercent / 100d) / 2d)));
     }
 
     public int getRowSpacing() {
@@ -131,7 +133,7 @@ public class DankImageGrid {
     }
 
     public void setRowSpacingPercent(double rowSpacingPercent) {
-        setRowSpacing((int)Math.round((((double)getPixelsPerRow()) * (rowSpacingPercent / 100d))/2d));
+        setRowSpacing((int) Math.round((((double) getPixelsPerRow()) * (rowSpacingPercent / 100d)) / 2d));
     }
 
     public DankSpacing getSquareSpacing(int extraColumnSpacing, int extraRowSpacing) {
@@ -154,7 +156,7 @@ public class DankImageGrid {
     public DankSpacing getSquareSpacingPercent(double extraSpacingPercent) {
         int minLength = Math.min(getPixelsPerColumn(), getPixelsPerRow());
 
-        return getSquareSpacing((int)Math.round(((((double)minLength) * (extraSpacingPercent / 100d)))/2d));
+        return getSquareSpacing((int) Math.round(((((double) minLength) * (extraSpacingPercent / 100d))) / 2d));
     }
 
     public double getExtraAutoSpacingPercent() {
@@ -180,30 +182,86 @@ public class DankImageGrid {
     public int getPixelsPerRow() {
         return Math.floorDiv(getHeight(), getRows());
     }
-    
-    public class DankDrawSpace {
-    	public final int x;
-    	public final int y;
-    	public final int width;
-    	public final int height;
-    	
-    	public DankDrawSpace(int x, int y, int width, int height) {
-    		this.x = x;
-    		this.y = y;
-    		this.width = width;
-    		this.height = height;
-    	}
+
+    public class DankDrawSpace extends Rectangle {
+        private static final long serialVersionUID = 1701904706008193376L;
+
+        public DankDrawSpace(int x, int y, int width, int height) {
+            setBounds(x, y, width, height);
+        }
+
+        public String toString() {
+            return "{(" + x + ", " + y + "), width=" + width + ", height=" + height + "}";
+        }
     }
-    
+
     public DankDrawSpace getDrawSpaceAt(int column, int row) {
         DankSpacing spacing = getAutoSpacing();
 
-    	int x = (column * getPixelsPerColumn()) + spacing.columnSpacing;
-    	int y = (row * getPixelsPerRow()) + spacing.rowSpacing;
-    	
-    	int width = getPixelsPerColumn() - spacing.columnSpacing;
-    	int height = getPixelsPerRow() - spacing.rowSpacing;
-    	
-    	return new DankDrawSpace(x, y, width, height);
+        int x = (column * getPixelsPerColumn()) + spacing.columnSpacing;
+        int y = (row * getPixelsPerRow()) + spacing.rowSpacing;
+
+        int width = getPixelsPerColumn() - (spacing.columnSpacing * 2);
+        int height = getPixelsPerRow() - (spacing.rowSpacing * 2);
+
+        return new DankDrawSpace(x, y, width, height);
+    }
+
+    public class DankLine {
+        Point pointFrom;
+        Point pointTo;
+
+        public DankLine(Point pointFrom, Point pointTo) {
+
+            this.pointFrom = pointFrom;
+            this.pointTo = pointTo;
+        }
+
+        public DankLine(int x1, int y1, int x2, int y2) {
+
+            this.pointFrom = new Point(x1, y1);
+            this.pointTo = new Point(x2, y2);
+        }
+    }
+
+    public DankLine getColumnLineAt(int column) {
+        int x = getPixelsPerColumn() * column;
+        return new DankLine(x, 0, x, getHeight());
+    }
+
+    public DankLine getRowLineAt(int row) {
+        int y = getPixelsPerRow() * row;
+        return new DankLine(0, y, getWidth(), y);
+    }
+
+    public void drawGridLines(Graphics2D graphics) {
+        for (int x = 0; x < getColumns(); x++) {
+            DankImageGrid.DankLine line = getColumnLineAt(x);
+            graphics.drawLine(line.pointFrom.x, line.pointFrom.y, line.pointTo.x, line.pointTo.y);
+        }
+
+        for (int y = 0; y < getRows(); y++) {
+            DankImageGrid.DankLine line = getRowLineAt(y);
+            graphics.drawLine(line.pointFrom.x, line.pointFrom.y, line.pointTo.x, line.pointTo.y);
+        }
+    }
+
+    public DankImageGrid clone() {
+        DankImageGrid clone = new DankImageGrid();
+
+        clone.setWidth(getWidth());
+        clone.setHeight(getHeight());
+
+        clone.setColumns(getColumns());
+        clone.setRows(getRows());
+
+        clone.setColumnSpacing(getColumnSpacing());
+        clone.setRowSpacing(getRowSpacing());
+
+        clone.setExtraAutoSpacingPercent(getExtraAutoSpacingPercent());
+
+        clone.setAutoSpacingType(getAutoSpacingType());
+
+        return clone;
     }
 }
