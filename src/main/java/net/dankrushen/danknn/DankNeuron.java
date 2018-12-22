@@ -1,6 +1,10 @@
 package net.dankrushen.danknn;
 
 import net.dankrushen.danknn.danklayers.DankLayer;
+import net.dankrushen.danknn.danklayers.IDankInputLayer;
+import net.dankrushen.danknn.danklayers.IDankOutputLayer;
+
+import java.util.ArrayList;
 
 public class DankNeuron {
     private final DankLayer parentLayer;
@@ -19,6 +23,34 @@ public class DankNeuron {
 
     public DankLayer getParentLayer() {
         return parentLayer;
+    }
+
+    public DankConnection[] getInputConnections() {
+        ArrayList<DankConnection> connections = new ArrayList<DankConnection>();
+
+        if (parentLayer instanceof IDankOutputLayer) {
+            for (DankConnection connection : ((IDankOutputLayer) parentLayer).getInputConnections()) {
+                if (connection.neuronTo == this) {
+                    connections.add(connection);
+                }
+            }
+        }
+
+        return connections.toArray(new DankConnection[]{});
+    }
+
+    public DankConnection[] getOutputConnections() {
+        ArrayList<DankConnection> connections = new ArrayList<DankConnection>();
+
+        if (parentLayer instanceof IDankInputLayer) {
+            for (DankConnection connection : ((IDankInputLayer) parentLayer).getOutputConnections()) {
+                if (connection.neuronFrom == this) {
+                    connections.add(connection);
+                }
+            }
+        }
+
+        return connections.toArray(new DankConnection[]{});
     }
 
     public void reset() {

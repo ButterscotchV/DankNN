@@ -1,5 +1,6 @@
 package net.dankrushen.danknn;
 
+import net.dankrushen.danknn.dankgraphics.DankImageGrid;
 import net.dankrushen.danknn.danklayers.DankLayer;
 import net.dankrushen.danknn.danklayers.IDankOutputLayer;
 
@@ -8,7 +9,6 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.Random;
 
 public class DankNN {
@@ -236,14 +236,6 @@ public class DankNN {
 
                 if (epochIters % 500 == 0 || epochIters >= expectedInOuts.length) {
                     if (false) { // Debugging actual network
-                        DecimalFormat f = new DecimalFormat("0.000");
-                        String spaces = makeSpaces(5);
-
-                        //System.out.println(f.format(neuron11) + " " + f.format(weight11) + " | " + f.format(neuron21) + " " + f.format(weight31) + " | " + f.format(neuron31));
-                        //System.out.println(spaces + "\\" + f.format(weight12) + " | " + spaces + "\\" + f.format(weight32) + " | " + spaces);
-                        //System.out.println(spaces + "/" + f.format(weight21) + " | " + spaces + "/" + f.format(weight41) + " | " + spaces);
-                        //System.out.println(f.format(neuron12) + " " + f.format(weight22) + " | " + f.format(neuron22) + " " + f.format(weight42) + " | " + f.format(neuron32));
-
                         System.out.println();
                         int layerNum = 1;
                         for (DankLayer layer : network.getLayers()) {
@@ -282,7 +274,7 @@ public class DankNN {
             System.out.println();
         }
 
-        double[] inputs = new double[]{-0.6584706016718167, -0.17883548346504163};
+        double[] inputs = new double[]{-0.653557941943574, -2.250244121966053}; // Positive
         double[] outputs = network.runOnInputs(inputs);
 
         System.out.println("Point: (" + inputs[0] + ", " + inputs[1] + ")");
@@ -292,16 +284,6 @@ public class DankNN {
 
     public double pythagoreanTheorem(double a, double b) {
         return Math.sqrt((a * a) + (b * b));
-    }
-
-    public static String makeSpaces(int spaces) {
-        String spacesString = "";
-
-        for (int i = 0; i < spaces; i++) {
-            spacesString += " ";
-        }
-
-        return spacesString;
     }
 
     public static double[][][] shuffleData(double[][]... data) {

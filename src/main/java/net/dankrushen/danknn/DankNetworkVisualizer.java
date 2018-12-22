@@ -1,15 +1,18 @@
 package net.dankrushen.danknn;
 
-import net.dankrushen.danknn.DankImageGrid.DankDrawSpace;
+import net.dankrushen.danknn.dankgraphics.DankImageGrid;
+import net.dankrushen.danknn.dankgraphics.DankImageGrid.AutoSpacingType;
 import net.dankrushen.danknn.danklayers.DankInputLayer;
 import net.dankrushen.danknn.danklayers.DankLayer;
 import net.dankrushen.danknn.danklayers.IDankOutputLayer;
+import org.w3c.dom.css.Rect;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.image.BufferedImage;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 public class DankNetworkVisualizer {
@@ -33,7 +36,7 @@ public class DankNetworkVisualizer {
     public void setDisplayEnabled(boolean enable) {
         if (enable) {
             if (displayWindow == null)
-                displayWindow = new JFrame();
+                displayWindow = new JFrame("Network Visualizer Display");
 
             if (imageDisplay == null)
                 imageDisplay = new JLabel();
@@ -92,40 +95,75 @@ public class DankNetworkVisualizer {
         DankImageGrid connectionImageGrid = imageGrid.clone();
 
         connectionImageGrid.setRows(connectionRowCount);
+        connectionImageGrid.setAutoSpacingType(AutoSpacingType.NONE);
 
         int strokeWidth = 6;
-        int ovalSpacing = Math.floorDiv(strokeWidth, 2);
 
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        DecimalFormat decimalFormat = new DecimalFormat("0.00000");
+        decimalFormat.setRoundingMode(RoundingMode.CEILING);
 
-        for (int x = 0; x < imageGrid.getColumns(); x++) {
-            System.out.println();
+        for (int x = 0; x < Math.max(imageGrid.getColumns(), connectionImageGrid.getColumns()); x++) {
+            DankLayer layer;
+            IDankOutputLayer outputLayer = null;
+            boolean neuronLayer = x % 2 == 0;
 
-            for (int y = 0; y < imageGrid.getRows(); y++) {
-                DankDrawSpace drawSpace = imageGrid.getDrawSpaceAt(x, y);
-                graphics.setClip(drawSpace);
+            if (neuronLayer) {
+                layer = network.getLayers()[x / 2];
+            } else {
+                layer = network.getLayers()[(x + 1) / 2];
+                outputLayer = (IDankOutputLayer) layer;
+            }
 
+            for (int y = 0; y < Math.max(imageGrid.getRows(), connectionImageGrid.getRows()); y++) {
                 // Draw neuron layer every even x column
-                if (x % 2 == 0) {
-                    DankLayer layer = network.getLayers()[x / 2];
+                if (neuronLayer) {
+                    if (y >= imageGrid.getRows())
+                        continue;
+
+                    Rectangle drawSpace = imageGrid.getDrawSpaceAt(x, y);
+                    graphics.setClip(drawSpace);
 
                     if (y < layer.getNeurons().length) {
                         // System.out.println("Neuron Draw Area: " + drawSpace); // Spacing debug
 
                         DankNeuron neuron = layer.getNeurons()[y];
 
-                        // Neuron Center
-                        graphics.setColor(Color.LIGHT_GRAY);
-                        graphics.setStroke(new BasicStroke(0));
-                        graphics.fillOval(drawSpace.x + ovalSpacing, drawSpace.y + ovalSpacing, drawSpace.width - strokeWidth, drawSpace.height - strokeWidth);
+                        drawOvalInternalBorder(graphics, Color.LIGHT_GRAY, Color.DARK_GRAY, strokeWidth, drawSpace);
 
-                        // Neuron Outline
-                        graphics.setColor(Color.DARK_GRAY);
-                        graphics.setStroke(new BasicStroke(strokeWidth));
-                        graphics.drawOval(drawSpace.x + ovalSpacing, drawSpace.y + ovalSpacing, drawSpace.width - strokeWidth, drawSpace.height - strokeWidth);
+                        double neuronValue = layer instanceof DankInputLayer ? neuron.getValue() : neuron.getActivatedValue();
+                        String neuronText = decimalFormat.format(neuronValue);
 
-                        DecimalFormat decimalFormat = new DecimalFormat("0.00000");
-                        String neuronText = decimalFormat.format(layer instanceof DankInputLayer ? neuron.getValue() : neuron.getActivatedValue());
+                        graphics.setFont(graphics.getFont().deriveFont(25f));
+
+                        Rectangle stringBounds = getStringBounds(graphics, neuronText, drawSpace.x, drawSpace.y);
+
+                        graphics.setColor(Color.BLACK);
+                        graphics.drawString(neuronText, ((int) Math.floor(drawSpace.getCenterX())) - Math.floorDiv(stringBounds.width, 2), ((int) Math.floor(drawSpace.getCenterY())) + Math.floorDiv(stringBounds.height, 2));
+
+                        // Draw line to connection
+                        graphics.setClip(null);
+                        for (int i = 0; i < neuron.getOutputConnections().length; i++) {
+                            Rectangle connectionDrawSpace = imageGrid.getDrawSpaceAt(x, y);
+
+                            graphics.setStroke(new BasicStroke(3));
+                            graphics.setColor(Color.DARK_GRAY);
+
+                            graphics.setStroke(new BasicStroke(1));
+                            graphics.setColor(Color.LIGHT_GRAY);
+                        }
+                    }
+                } else { // Draw connection layer every even x column
+                    if (y >= connectionImageGrid.getRows())
+                        continue;
+
+                    Rectangle drawSpace = connectionImageGrid.getDrawSpaceAt(x, y);
+                    graphics.setClip(drawSpace);
+
+                    if (y < outputLayer.getInputConnections().length) {
+                        DankConnection connection = outputLayer.getInputConnections()[y];
+
+                        String neuronText = decimalFormat.format(connection.weight);
 
                         graphics.setFont(graphics.getFont().deriveFont(25f));
 
@@ -158,6 +196,30 @@ public class DankNetworkVisualizer {
         }
 
         return image;
+    }
+
+    private void drawOvalInternalBorder(Graphics2D graphics2D, Color innerColour, Color outerColour, int thickness, int x, int y, int width, int height) {
+        int ovalSpacing = Math.floorDiv(thickness, 2);
+        boolean antialias = usesAntialiasing(graphics2D);
+        int antialiasSpacing = antialias ? 1 : 0;
+
+        // Center
+        graphics2D.setColor(innerColour);
+        graphics2D.setStroke(new BasicStroke(0));
+        graphics2D.fillOval(x + ovalSpacing, y + ovalSpacing, width - thickness - antialiasSpacing, height - thickness - antialiasSpacing);
+
+        // Outline
+        graphics2D.setColor(outerColour);
+        graphics2D.setStroke(new BasicStroke(thickness));
+        graphics2D.drawOval(x + ovalSpacing, y + ovalSpacing, width - thickness - antialiasSpacing, height - thickness - antialiasSpacing);
+    }
+
+    private void drawOvalInternalBorder(Graphics2D graphics2D, Color innerColour, Color outerColour, int thickness, Rectangle bounds) {
+        drawOvalInternalBorder(graphics2D, innerColour, outerColour, thickness, bounds.x, bounds.y, bounds.width, bounds.height);
+    }
+
+    private boolean usesAntialiasing(Graphics2D graphics2D) {
+        return graphics2D.getRenderingHints().containsKey(RenderingHints.KEY_ANTIALIASING) && graphics2D.getRenderingHints().get(RenderingHints.KEY_ANTIALIASING) == RenderingHints.VALUE_ANTIALIAS_ON;
     }
 
     private Rectangle getStringBounds(Graphics2D g2, String str, float x, float y) {

@@ -1,6 +1,7 @@
-package net.dankrushen.danknn;
+package net.dankrushen.danknn.dankgraphics;
 
 import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class DankImageGrid implements Cloneable {
     private int width = 1280;
@@ -183,19 +184,7 @@ public class DankImageGrid implements Cloneable {
         return Math.floorDiv(getHeight(), getRows());
     }
 
-    public class DankDrawSpace extends Rectangle {
-        private static final long serialVersionUID = 1701904706008193376L;
-
-        public DankDrawSpace(int x, int y, int width, int height) {
-            setBounds(x, y, width, height);
-        }
-
-        public String toString() {
-            return "{(" + x + ", " + y + "), width=" + width + ", height=" + height + "}";
-        }
-    }
-
-    public DankDrawSpace getDrawSpaceAt(int column, int row) {
+    public Rectangle getDrawSpaceAt(int column, int row) {
         DankSpacing spacing = getAutoSpacing();
 
         int x = (column * getPixelsPerColumn()) + spacing.columnSpacing;
@@ -204,45 +193,28 @@ public class DankImageGrid implements Cloneable {
         int width = getPixelsPerColumn() - (spacing.columnSpacing * 2);
         int height = getPixelsPerRow() - (spacing.rowSpacing * 2);
 
-        return new DankDrawSpace(x, y, width, height);
+        return new Rectangle(x, y, width, height);
     }
 
-    public class DankLine {
-        Point pointFrom;
-        Point pointTo;
-
-        public DankLine(Point pointFrom, Point pointTo) {
-
-            this.pointFrom = pointFrom;
-            this.pointTo = pointTo;
-        }
-
-        public DankLine(int x1, int y1, int x2, int y2) {
-
-            this.pointFrom = new Point(x1, y1);
-            this.pointTo = new Point(x2, y2);
-        }
-    }
-
-    public DankLine getColumnLineAt(int column) {
+    public Line2D getColumnLineAt(int column) {
         int x = getPixelsPerColumn() * column;
-        return new DankLine(x, 0, x, getHeight());
+        return new Line2D.Float(x, 0, x, getHeight());
     }
 
-    public DankLine getRowLineAt(int row) {
+    public Line2D getRowLineAt(int row) {
         int y = getPixelsPerRow() * row;
-        return new DankLine(0, y, getWidth(), y);
+        return new Line2D.Float(0, y, getWidth(), y);
     }
 
     public void drawGridLines(Graphics2D graphics) {
         for (int x = 0; x < getColumns(); x++) {
-            DankImageGrid.DankLine line = getColumnLineAt(x);
-            graphics.drawLine(line.pointFrom.x, line.pointFrom.y, line.pointTo.x, line.pointTo.y);
+            Line2D line = getColumnLineAt(x);
+            //graphics.drawLine(line);
         }
 
         for (int y = 0; y < getRows(); y++) {
-            DankImageGrid.DankLine line = getRowLineAt(y);
-            graphics.drawLine(line.pointFrom.x, line.pointFrom.y, line.pointTo.x, line.pointTo.y);
+            Line2D line = getRowLineAt(y);
+            //graphics.drawLine(line);
         }
     }
 
