@@ -2,43 +2,34 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7a255b8b-559f-4173-90a6-8220efb8d7a3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/danknn.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankConnection.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNN.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNetwork.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNetworkBuilder.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNetworkVisualizer.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNeuron.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/dankgraphics/DankImageGrid.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/DankFullyConnectedLayer.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/DankInputLayer.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/DankLayer.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/DankOutputLayer.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/IDankConnectedLayer.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/IDankInputLayer.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/IDankLayer.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/IDankOutputLayer.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/extensions/Graphics2DExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankConnection.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNN.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNetwork.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNetworkBuilder.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNetworkVisualizer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNeuron.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/dankgraphics/DankImageGrid.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/DankFullyConnectedLayer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/DankInputLayer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/DankLayer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/DankOutputLayer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/IDankConnectedLayer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/IDankInputLayer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/IDankLayer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/IDankOutputLayer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankConnection.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankConnection.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNN.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNN.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNetwork.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNetwork.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNetworkVisualizer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNetworkVisualizer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNeuron.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNeuron.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/extensions/Graphics2DExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/extensions/Graphics2DExtensions.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/DankConnection.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/DankConnection.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/DankNN$Companion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/DankNN$Companion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/DankNN.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/DankNN.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/DankNetwork$Companion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/DankNetwork$Companion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/DankNetwork.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/DankNetwork.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/DankNetworkBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/DankNetworkBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/DankNetworkVisualizer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/DankNetworkVisualizer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/DankNeuron.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/DankNeuron.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/dankgraphics/DankImageGrid$AutoSpacingType.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/dankgraphics/DankImageGrid$AutoSpacingType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/dankgraphics/DankImageGrid$DankSpacing.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/dankgraphics/DankImageGrid$DankSpacing.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/dankgraphics/DankImageGrid.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/dankgraphics/DankImageGrid.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/danklayers/DankFullyConnectedLayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/danklayers/DankFullyConnectedLayer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/danklayers/DankInputLayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/danklayers/DankInputLayer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/danklayers/DankLayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/danklayers/DankLayer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/danklayers/DankOutputLayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/danklayers/DankOutputLayer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/danklayers/IDankConnectedLayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/danklayers/IDankConnectedLayer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/danklayers/IDankInputLayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/danklayers/IDankInputLayer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/danklayers/IDankLayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/danklayers/IDankLayer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/danklayers/IDankOutputLayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/danklayers/IDankOutputLayer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/extensions/Graphics2DExtensionsKt.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/net/dankrushen/danknn/extensions/Graphics2DExtensionsKt.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -47,13 +38,96 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="true">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankConnection.kt">
           <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="11" column="29" selection-start-line="11" selection-start-column="29" selection-end-line="11" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNeuron.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="400">
+              <caret line="72" column="38" selection-start-line="72" selection-start-column="38" selection-end-line="72" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNN.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="476">
+              <caret line="126" lean-forward="true" selection-start-line="126" selection-end-line="126" />
+              <folding>
+                <element signature="e#31#300#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNetwork.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="383">
+              <caret line="159" column="42" lean-forward="true" selection-start-line="159" selection-start-column="42" selection-end-line="159" selection-end-column="42" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/extensions/Graphics2DExtensions.kt">
+          <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="323">
-              <caret line="21" column="5" lean-forward="true" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
+              <caret line="24" column="72" selection-start-line="24" selection-start-column="72" selection-end-line="24" selection-end-column="72" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNetworkVisualizer.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2006">
+              <caret line="130" column="128" selection-start-line="130" selection-start-column="128" selection-end-line="130" selection-end-column="128" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/DankLayer.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/dankgraphics/DankImageGrid.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2363">
+              <caret line="142" column="26" selection-start-line="142" selection-start-column="26" selection-end-line="142" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -65,6 +139,7 @@
       <list>
         <option value="Interface" />
         <option value="Class" />
+        <option value="Kotlin File" />
       </list>
     </option>
   </component>
@@ -72,6 +147,8 @@
     <findStrings>
       <find>clip</find>
       <find>setclip</find>
+      <find>/</find>
+      <find>reset</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -98,7 +175,15 @@
         <option value="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankImageGrid.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNetworkVisualizer.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNN.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/dankgraphics/DankImageGrid.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/extensions/FontMetricsExtensions.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/extensions/Graphics2DExtensions.kt" />
         <option value="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankConnection.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNetworkVisualizer.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNeuron.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/DankLayer.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNetwork.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNN.kt" />
       </list>
     </option>
   </component>
@@ -110,8 +195,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="333" />
-    <option name="y" value="-15" />
+    <option name="x" value="302" />
+    <option name="y" value="-25" />
     <option name="width" value="1400" />
     <option name="height" value="1000" />
   </component>
@@ -157,6 +242,33 @@
             </path>
             <path>
               <item name="DankNN" type="b2602c69:ProjectViewProjectNode" />
+              <item name="DankNN" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="danknn" type="462c0819:PsiDirectoryNode" />
+              <item name="dankgraphics" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="DankNN" type="b2602c69:ProjectViewProjectNode" />
+              <item name="DankNN" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="danknn" type="462c0819:PsiDirectoryNode" />
+              <item name="danklayers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="DankNN" type="b2602c69:ProjectViewProjectNode" />
+              <item name="DankNN" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="danknn" type="462c0819:PsiDirectoryNode" />
+              <item name="extensions" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="DankNN" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
           </expand>
@@ -168,14 +280,16 @@
   </component>
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://D:/Documents/GitHub/DankNN/src/main/java/net/dankrushen/danknn/danklayers/DankLayer.java" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1545509741445" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1545602872917" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -192,7 +306,7 @@
   <component name="RunManager">
     <configuration name="DankNN" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="net.dankrushen.danknn.DankNN" />
-      <module name="danknn" />
+      <module name="DankNN" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="net.dankrushen.danknn.danklayers.*" />
@@ -219,14 +333,19 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1543786848006</updated>
+      <workItem from="1545520051109" duration="18365000" />
+      <workItem from="1545597827271" duration="4681000" />
     </task>
     <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="23046000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21162046" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21588486" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -234,17 +353,20 @@
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3290993" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3308026" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3991323" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32827735" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49946696" visible="true" weight="0.33044422" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39869988" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" weight="0.329718" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50053304" side_tool="true" weight="0.33044422" />
       <window_info anchor="bottom" id="Version Control" order="9" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.3290993" />
-      <window_info anchor="right" id="Maven" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.32827735" />
+      <window_info anchor="bottom" id="Database Changes" order="11" />
+      <window_info anchor="bottom" id="Docker" order="12" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Duplicates" order="13" />
+      <window_info anchor="bottom" id="Inspection Results" order="14" weight="0.32936078" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -253,7 +375,12 @@
       <window_info anchor="right" id="Theme Preview" order="5" />
       <window_info anchor="right" id="Palette&#9;" order="6" />
       <window_info anchor="right" id="Maven Projects" order="7" />
+      <window_info anchor="right" id="Maven" order="8" />
+      <window_info anchor="right" id="Database" order="9" weight="0.32995737" />
     </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>
@@ -303,13 +430,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk-10.0.2/lib/src.zip!/java.desktop/java/awt/Graphics.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="911">
-          <caret line="325" column="25" selection-start-line="325" selection-start-column="25" selection-end-line="325" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk-10.0.2/lib/src.zip!/java.desktop/java/awt/Graphics2D.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="179">
@@ -333,10 +453,88 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNeuron.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/DankOutputLayer.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNN.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankConnection.kt">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/IDankLayer.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="10" selection-start-line="4" selection-start-column="10" selection-end-line="4" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk-10.0.2/lib/src.zip!/java.desktop/java/awt/Graphics.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="255" column="22" selection-start-line="255" selection-start-column="11" selection-end-line="255" selection-end-column="22" />
+          <folding>
+            <element signature="e#9908#9909#0" expanded="true" />
+            <element signature="e#9956#9957#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/extensions/FontMetricsExtensions.kt" />
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib/1.3.11/kotlin-stdlib-1.3.11.jar!/kotlin/collections/ArraysKt.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="369" column="35" selection-start-line="369" selection-start-column="35" selection-end-line="369" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/extensions/Graphics2DExtensions.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
-          <caret line="21" column="5" lean-forward="true" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
+          <caret line="24" column="72" selection-start-line="24" selection-start-column="72" selection-end-line="24" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/dankgraphics/DankImageGrid.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2363">
+          <caret line="142" column="26" selection-start-line="142" selection-start-column="26" selection-end-line="142" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankConnection.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="29" selection-start-line="11" selection-start-column="29" selection-end-line="11" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/danklayers/DankLayer.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNetworkVisualizer.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2006">
+          <caret line="130" column="128" selection-start-line="130" selection-start-column="128" selection-end-line="130" selection-end-column="128" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNeuron.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="72" column="38" selection-start-line="72" selection-start-column="38" selection-end-line="72" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNetwork.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="383">
+          <caret line="159" column="42" lean-forward="true" selection-start-line="159" selection-start-column="42" selection-end-line="159" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/dankrushen/danknn/DankNN.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="126" lean-forward="true" selection-start-line="126" selection-end-line="126" />
+          <folding>
+            <element signature="e#31#300#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

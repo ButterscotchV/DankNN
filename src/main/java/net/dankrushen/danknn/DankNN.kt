@@ -9,8 +9,6 @@ import java.util.*
 import javax.imageio.ImageIO
 import javax.swing.JFrame
 
-
-
 class DankNN {
     init {
         val networkBuilder = DankNetworkBuilder(2)
@@ -19,6 +17,8 @@ class DankNN {
         networkBuilder.addLayer(2)
 
         val network = networkBuilder.buildNetwork(1)
+
+        network.setBias(0.1)
 
         val visualizer = DankNetworkVisualizer(network, 1280, 720)
 
@@ -50,7 +50,7 @@ class DankNN {
                 matches = if (positive) dist <= 2.5 else dist >= 3.5
 
                 if (matches) {
-                    expectedInOutsList.add(arrayOf(doubleArrayOf(x, y), doubleArrayOf((if (positive) 1 else -1).toDouble())))
+                    expectedInOutsList.add(arrayOf(doubleArrayOf(x, y), doubleArrayOf((if (positive) 1.0 else -1.0))))
 
                     println((if (positive) "Positive" else "Negative") + " point at (" + x + ", " + y + ")")
                 }
@@ -76,19 +76,15 @@ class DankNN {
 
         val learningRate = 0.03
 
-        while (epochs < 1000) {
+        while (epochs < 500) {
             epochLoss = 0.0
 
             for (expectedInOut in shuffleDataset(expectedInOuts)) {
-                val outputs = network.forwardprop(expectedInOut[0])
-                val errors = DoubleArray(outputs.size)
-
-                for (i in outputs.indices) {
-                    errors[i] = expectedInOut[1][i] - outputs[i]
-                }
-
-                loss = network.backprop(errors, learningRate)
+                network.forwardProp(expectedInOut[0])
+                loss = network.backProp(expectedInOut[1])
                 epochLoss += loss
+
+                network.updateWeights(learningRate)
 
                 epochIters++
 
@@ -127,17 +123,16 @@ class DankNN {
             epochLoss /= epochIters.toDouble()
             epochIters = 0
 
-            //learningRate *= 0.985;
-
-            //saveImage(visualizer.drawImage());
             visualizer.drawImage()
+
+            //learningRate *= 0.985;
 
             println("Epoch Loss = $epochLoss")
             println()
         }
 
         val inputs = doubleArrayOf(-0.653557941943574, -2.250244121966053) // Positive
-        val outputs = network.forwardprop(inputs)
+        val outputs = network.forwardProp(inputs)
 
         println("Point: (" + inputs[0] + ", " + inputs[1] + ")")
         println("Group (+1 or -1): " + outputs[0])
@@ -145,7 +140,7 @@ class DankNN {
     }
 
     private fun pythagoreanTheorem(a: Double, b: Double): Double {
-        return Math.sqrt(a * a + b * b)
+        return Math.sqrt(Math.pow(a, 2.0) + Math.pow(b, 2.0))
     }
 
     companion object {
@@ -158,24 +153,24 @@ class DankNN {
                 val dankNN = DankNN()
 
                 /*
-            DankNetworkBuilder builder = new DankNetworkBuilder(1);
+                DankNetworkBuilder builder = new DankNetworkBuilder(1);
 
-            builder.addLayer(1);
+                builder.addLayer(1);
 
-            DankNetwork network = builder.buildNetwork(1);
+                DankNetwork network = builder.buildNetwork(1);
 
-        	//int connections = 0;
+                //int connections = 0;
 
-        	//for (DankLayer layer : network.getLayers()) {
-        	//	if (layer instanceof IDankInputLayer)
-        	//		connections += ((IDankInputLayer)layer).getOutputConnections().length;
-        	//}
+                //for (DankLayer layer : network.getLayers()) {
+                //	if (layer instanceof IDankInputLayer)
+                //		connections += ((IDankInputLayer)layer).getOutputConnections().length;
+                //}
 
-            //System.out.println("There are " + connections + " connections in the network.");
+                //System.out.println("There are " + connections + " connections in the network.");
 
-            double[] output = network.forwardprop(new double[]{2.5});
-            System.out.println(doubleArrayToString(output));
-            */
+                double[] output = network.forwardProp(new double[]{2.5});
+                System.out.println(doubleArrayToString(output));
+                */
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -206,13 +201,13 @@ class DankNN {
             connections2[1].weight = 0.5
             connections2[2].weight = 0.9
 
-            var output = network.forwardprop(doubleArrayOf(1.0, 1.0))[0]
+            var output = network.forwardProp(doubleArrayOf(1.0, 1.0))[0]
 
             println("Output Num: $output")
 
-            network.backprop(doubleArrayOf(0 - output))
+            network.backProp(doubleArrayOf(0 - output))
 
-            output = network.forwardprop(doubleArrayOf(1.0, 1.0))[0]
+            output = network.forwardProp(doubleArrayOf(1.0, 1.0))[0]
 
             println("Output Num: $output")
         }
@@ -245,28 +240,28 @@ class DankNN {
             connections2[3].weight = 0.55
 
             var outputs: DoubleArray
-            outputs = network.forwardprop(doubleArrayOf(0.05, 0.10))
+            outputs = network.forwardProp(doubleArrayOf(0.05, 0.10))
 
-            println("h1: " + network.getLayers()[1].neurons[0].value)
+            println("h1: " + network.getLayers()[1].neurons[0].output)
 
             println("Output Nums: " + outputs[0] + ", " + outputs[1])
 
-            network.backprop(doubleArrayOf(0.01 - outputs[0], 0.99 - outputs[1]))
+            network.backProp(doubleArrayOf(0.01 - outputs[0], 0.99 - outputs[1]))
 
-            outputs = network.forwardprop(doubleArrayOf(0.05, 0.10))
+            outputs = network.forwardProp(doubleArrayOf(0.05, 0.10))
 
             println("Output Nums: " + outputs[0] + ", " + outputs[1])
 
             for (i in 0..9998) {
-                outputs = network.forwardprop(doubleArrayOf(0.05, 0.10))
+                outputs = network.forwardProp(doubleArrayOf(0.05, 0.10))
 
-                println("h1: " + network.getLayers()[1].neurons[0].value)
+                println("h1: " + network.getLayers()[1].neurons[0].output)
 
                 println("Output Nums: " + outputs[0] + ", " + outputs[1])
 
-                network.backprop(doubleArrayOf(0.01 - outputs[0], 0.99 - outputs[1]))
+                val loss = network.backProp(doubleArrayOf(0.01 - outputs[0], 0.99 - outputs[1]))
 
-                println("Loss: " + network.calculateLoss())
+                println("Loss: $loss")
             }
         }
 
@@ -289,7 +284,7 @@ class DankNN {
 
         }
 
-        fun shuffleDataset(dataset: Array<Array<DoubleArray>>) : Array<Array<DoubleArray>> {
+        fun shuffleDataset(dataset: Array<Array<DoubleArray>>): Array<Array<DoubleArray>> {
             val dataShuffled = dataset.clone()
 
             val rng = Random()

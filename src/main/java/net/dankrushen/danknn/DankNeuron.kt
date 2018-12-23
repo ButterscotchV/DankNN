@@ -7,17 +7,16 @@ import java.util.*
 
 class DankNeuron(val parentLayer: DankLayer) {
 
-    private var _value: Double = 0.0
-    var value: Double
-        get() = _value + bias
-        set(value) {
-            _value = value
-        }
-    val activatedValue: Double
-        get() = DankNetwork.activationFunction(value)
-    var bias: Double = 0.0
-    var error: Double = 0.0
-    var iters: Int = 0
+    var bias = 0.0
+
+    var totalInput = 0.0
+    var output = 0.0
+
+    var outputDerivative = 0.0
+    var inputDerivative = 0.0
+
+    var accumulatedInputDerivative = 0.0
+    var numberAccumulatedDerivatives = 0
 
     val inputConnections: Array<DankConnection>
         get() {
@@ -25,7 +24,7 @@ class DankNeuron(val parentLayer: DankLayer) {
 
             if (parentLayer is IDankOutputLayer) {
                 for (connection in (parentLayer as IDankOutputLayer).inputConnections) {
-                    if (connection.neuronTo === this) {
+                    if (connection.destNeuron === this) {
                         connections.add(connection)
                     }
                 }
@@ -40,7 +39,7 @@ class DankNeuron(val parentLayer: DankLayer) {
 
             if (parentLayer is IDankInputLayer) {
                 for (connection in (parentLayer as IDankInputLayer).outputConnections) {
-                    if (connection.neuronFrom === this) {
+                    if (connection.sourceNeuron === this) {
                         connections.add(connection)
                     }
                 }
@@ -54,9 +53,24 @@ class DankNeuron(val parentLayer: DankLayer) {
     }
 
     fun reset() {
-        value = 0.0
-        bias = 0.0
-        error = 0.0
-        iters = 0
+        totalInput = 0.0
+        output = 0.0
+
+        outputDerivative = 0.0
+        inputDerivative = 0.0
+
+        accumulatedInputDerivative = 0.0
+        numberAccumulatedDerivatives = 0
+    }
+
+    fun updateOutput(): Double {
+        totalInput = bias
+
+        for (connection in inputConnections) {
+            totalInput += connection.weight * connection.sourceNeuron.output
+        }
+
+        output = DankNetwork.activationFunction(totalInput)
+        return output
     }
 }

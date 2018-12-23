@@ -2,9 +2,10 @@ package net.dankrushen.danknn
 
 import net.dankrushen.danknn.dankgraphics.DankImageGrid
 import net.dankrushen.danknn.dankgraphics.DankImageGrid.AutoSpacingType
-import net.dankrushen.danknn.danklayers.DankInputLayer
 import net.dankrushen.danknn.danklayers.DankLayer
 import net.dankrushen.danknn.danklayers.IDankOutputLayer
+import net.dankrushen.danknn.extensions.getStringBounds
+import net.dankrushen.danknn.extensions.usesAntialiasing
 import java.awt.*
 import java.awt.image.BufferedImage
 import java.math.RoundingMode
@@ -127,14 +128,14 @@ class DankNetworkVisualizer {
 
                         val neuron = layer.neurons[y]
 
-                        drawOvalInternalBorder(graphics, Color.LIGHT_GRAY, Color.DARK_GRAY, strokeWidth, drawSpace)
+                        drawOvalInternalBorder(graphics, Color.LIGHT_GRAY, Color(Math.min(1f, Math.max(0f, neuron.bias.toFloat())), 0f, 0f), strokeWidth, drawSpace)
 
-                        val neuronValue = if (layer is DankInputLayer) neuron.value else neuron.activatedValue
+                        val neuronValue = neuron.output
                         val neuronText = decimalFormat.format(neuronValue)
 
                         graphics.font = graphics.font.deriveFont(25f)
 
-                        val stringBounds = getStringBounds(graphics, neuronText, drawSpace.x.toFloat(), drawSpace.y.toFloat())
+                        val stringBounds = graphics.getStringBounds(neuronText)
 
                         graphics.color = Color.BLACK
                         graphics.drawString(neuronText, Math.floor(drawSpace.centerX).toInt() - Math.floorDiv(stringBounds.width, 2), Math.floor(drawSpace.centerY).toInt() + Math.floorDiv(stringBounds.height, 2))
@@ -161,14 +162,14 @@ class DankNetworkVisualizer {
                     if (y < outputLayer!!.inputConnections.size) {
                         val connection = outputLayer.inputConnections[y]
 
-                        val neuronText = decimalFormat.format(connection.weight)
+                        val connectionText = decimalFormat.format(connection.weight)
 
                         graphics.font = graphics.font.deriveFont(25f)
 
-                        val stringBounds = getStringBounds(graphics, neuronText, drawSpace.x.toFloat(), drawSpace.y.toFloat())
+                        val stringBounds = graphics.getStringBounds(connectionText)
 
                         graphics.color = Color.BLACK
-                        graphics.drawString(neuronText, Math.floor(drawSpace.centerX).toInt() - Math.floorDiv(stringBounds.width, 2), Math.floor(drawSpace.centerY).toInt() + Math.floorDiv(stringBounds.height, 2))
+                        graphics.drawString(connectionText, Math.floor(drawSpace.centerX).toInt() - Math.floorDiv(stringBounds.width, 2), Math.floor(drawSpace.centerY).toInt() + Math.floorDiv(stringBounds.height, 2))
                     }
                 }
             }
@@ -189,8 +190,7 @@ class DankNetworkVisualizer {
         if (imageDisplay != null) {
             imageDisplay!!.icon = ImageIcon(image)
 
-            if (displayWindow != null)
-                displayWindow!!.pack()
+            displayWindow!!.pack()
         }
 
         return image
@@ -198,8 +198,7 @@ class DankNetworkVisualizer {
 
     private fun drawOvalInternalBorder(graphics2D: Graphics2D, innerColour: Color, outerColour: Color, thickness: Int, x: Int, y: Int, width: Int, height: Int) {
         val ovalSpacing = Math.floorDiv(thickness, 2)
-        val antialias = usesAntialiasing(graphics2D)
-        val antialiasSpacing = if (antialias) 1 else 0
+        val antialiasSpacing = if (graphics2D.usesAntialiasing) 1 else 0
 
         // Center
         graphics2D.color = innerColour
@@ -214,16 +213,6 @@ class DankNetworkVisualizer {
 
     private fun drawOvalInternalBorder(graphics2D: Graphics2D, innerColour: Color, outerColour: Color, thickness: Int, bounds: Rectangle) {
         drawOvalInternalBorder(graphics2D, innerColour, outerColour, thickness, bounds.x, bounds.y, bounds.width, bounds.height)
-    }
-
-    private fun usesAntialiasing(graphics2D: Graphics2D): Boolean {
-        return graphics2D.renderingHints.containsKey(RenderingHints.KEY_ANTIALIASING) && graphics2D.renderingHints[RenderingHints.KEY_ANTIALIASING] === RenderingHints.VALUE_ANTIALIAS_ON
-    }
-
-    private fun getStringBounds(g2: Graphics2D, str: String, x: Float, y: Float): Rectangle {
-        val frc = g2.fontRenderContext
-        val gv = g2.font.createGlyphVector(frc, str)
-        return gv.getPixelBounds(null, x, y)
     }
 
     private fun getMostNeuronsInLayers(vararg layers: DankLayer): Int {
