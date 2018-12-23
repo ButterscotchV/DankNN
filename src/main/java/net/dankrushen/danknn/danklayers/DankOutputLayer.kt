@@ -20,4 +20,16 @@ class DankOutputLayer(numNeurons: Int, override val inputLayer: IDankInputLayer)
 
         inputConnections = inConnectionsList.toTypedArray()
     }
+
+    fun copyTo(outputLayer: DankOutputLayer): DankOutputLayer {
+        for (i in neurons.indices) {
+            neurons[i].copyTo(outputLayer.neurons[i])
+        }
+
+        for (i in inputConnections.indices) {
+            inputConnections[i].copyTo(outputLayer.inputConnections[i])
+        }
+
+        return outputLayer
+    }
 }

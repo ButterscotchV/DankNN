@@ -24,4 +24,16 @@ class DankFullyConnectedLayer(numNeurons: Int, override val inputLayer: IDankInp
 
         inputConnections = inConnectionsList.toTypedArray()
     }
+
+    fun copyTo(outputLayer: DankFullyConnectedLayer): DankFullyConnectedLayer {
+        for (i in neurons.indices) {
+            neurons[i].copyTo(outputLayer.neurons[i])
+        }
+
+        for (i in inputConnections.indices) {
+            inputConnections[i].copyTo(outputLayer.inputConnections[i])
+        }
+
+        return outputLayer
+    }
 }

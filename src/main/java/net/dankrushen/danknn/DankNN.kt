@@ -5,6 +5,8 @@ import net.dankrushen.danknn.danklayers.IDankOutputLayer
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.util.*
 import javax.imageio.ImageIO
 import javax.swing.JFrame
@@ -50,7 +52,7 @@ class DankNN {
                 matches = if (positive) dist <= 2.5 else dist >= 3.5
 
                 if (matches) {
-                    expectedInOutsList.add(arrayOf(doubleArrayOf(x, y), doubleArrayOf((if (positive) 1.0 else -1.0))))
+                    expectedInOutsList.add(arrayOf(doubleArrayOf(x, y), doubleArrayOf((if (positive) 1.0 else 0.0))))
 
                     println((if (positive) "Positive" else "Negative") + " point at (" + x + ", " + y + ")")
                 }
@@ -74,7 +76,10 @@ class DankNN {
 
         val timeDivisor = 1000000000.0
 
-        val learningRate = 0.03
+        var learningRate = 0.03
+
+        val formatter = DecimalFormat("0.000")
+        formatter.roundingMode = RoundingMode.CEILING
 
         while (epochs < 500) {
             epochLoss = 0.0
@@ -115,6 +120,8 @@ class DankNN {
                         }
                     }
 
+                    //visualizer.drawImageAsync("Loss: ${formatter.format(loss)}")
+
                     println("Iters = " + epochIters + "/" + expectedInOuts.size + ", Epochs = " + epochs + ", Loss = " + loss + ", Time/Iter = " + deltaTime / timeDivisor + ", Total Time = " + (curTime - initTime) / timeDivisor)
                 }
             }
@@ -123,9 +130,9 @@ class DankNN {
             epochLoss /= epochIters.toDouble()
             epochIters = 0
 
-            visualizer.drawImage()
+            visualizer.drawImageAsync("Epoch Loss: ${formatter.format(epochLoss)}")
 
-            //learningRate *= 0.985;
+            learningRate *= 0.985
 
             println("Epoch Loss = $epochLoss")
             println()

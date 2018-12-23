@@ -1,18 +1,16 @@
 package net.dankrushen.danknn
 
-import net.dankrushen.danknn.danklayers.DankLayer
-import net.dankrushen.danknn.danklayers.IDankInputLayer
-import net.dankrushen.danknn.danklayers.IDankOutputLayer
+import net.dankrushen.danknn.danklayers.*
 import java.util.*
 
-class DankNetwork(vararg layers: DankLayer) {
+class DankNetwork(vararg layers: DankLayer) : Cloneable {
     private val layers = ArrayList<DankLayer>()
 
-    val inputLayer: IDankInputLayer
-        get() = layers[0] as IDankInputLayer
+    val inputLayer: DankInputLayer
+        get() = layers[0] as DankInputLayer
 
-    val outputLayer: IDankOutputLayer
-        get() = layers[layers.size - 1] as IDankOutputLayer
+    val outputLayer: DankOutputLayer
+        get() = layers[layers.size - 1] as DankOutputLayer
 
     init {
         for (layer in layers) {
@@ -163,5 +161,32 @@ class DankNetwork(vararg layers: DankLayer) {
         fun lossFunction(output: Double, target: Double): Double = 0.5 * Math.pow(output - target, 2.0)
 
         fun derivLossFunction(output: Double, target: Double): Double = output - target
+    }
+
+    public override fun clone(): DankNetwork {
+        val layersClone = mutableListOf<DankLayer>()
+
+        layersClone.add(inputLayer.clone())
+
+        for (i in 1 until layers.size) {
+            val origLayer = layers[i]
+            val lastLayer = layersClone[layersClone.size - 1]
+
+            if (origLayer is DankFullyConnectedLayer) {
+                val newLayer = DankFullyConnectedLayer(origLayer.neurons.size, lastLayer as IDankInputLayer)
+
+                origLayer.copyTo(newLayer)
+
+                layersClone.add(newLayer)
+            } else if (origLayer is DankOutputLayer) {
+                val newLayer = DankOutputLayer(origLayer.neurons.size, lastLayer as IDankInputLayer)
+
+                origLayer.copyTo(newLayer)
+
+                layersClone.add(newLayer)
+            }
+        }
+
+        return DankNetwork(*layersClone.toTypedArray())
     }
 }

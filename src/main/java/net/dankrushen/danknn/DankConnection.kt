@@ -2,7 +2,7 @@ package net.dankrushen.danknn
 
 import java.util.*
 
-class DankConnection {
+class DankConnection : Cloneable {
     var sourceNeuron: DankNeuron
     var destNeuron: DankNeuron
 
@@ -16,14 +16,24 @@ class DankConnection {
     var accumulatedErrorDerivative = 0.0
     var numberAccumulatedDerivatives = 0
 
-    constructor(neuronFrom: DankNeuron, neuronTo: DankNeuron, initWeight: Double) {
-        this.sourceNeuron = neuronFrom
-        this.destNeuron = neuronTo
+    constructor(sourceNeuron: DankNeuron, destNeuron: DankNeuron, initWeight: Double) {
+        this.sourceNeuron = sourceNeuron
+        this.destNeuron = destNeuron
         weight = initWeight
     }
 
-    constructor(neuronFrom: DankNeuron, neuronTo: DankNeuron) {
-        this.sourceNeuron = neuronFrom
-        this.destNeuron = neuronTo
+    constructor(sourceNeuron: DankNeuron, destNeuron: DankNeuron) {
+        this.sourceNeuron = sourceNeuron
+        this.destNeuron = destNeuron
+    }
+
+    fun copyTo(connection: DankConnection): DankConnection {
+        connection.weight = weight
+
+        connection.errorDerivative = errorDerivative
+        connection.accumulatedErrorDerivative = accumulatedErrorDerivative
+        connection.numberAccumulatedDerivatives = numberAccumulatedDerivatives
+
+        return connection
     }
 }

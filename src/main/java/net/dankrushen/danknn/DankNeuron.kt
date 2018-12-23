@@ -5,7 +5,9 @@ import net.dankrushen.danknn.danklayers.IDankInputLayer
 import net.dankrushen.danknn.danklayers.IDankOutputLayer
 import java.util.*
 
-class DankNeuron(val parentLayer: DankLayer) {
+class DankNeuron {
+
+    val parentLayer: DankLayer
 
     var bias = 0.0
 
@@ -48,7 +50,8 @@ class DankNeuron(val parentLayer: DankLayer) {
             return connections.toTypedArray()
         }
 
-    init {
+    constructor(parentLayer: DankLayer) {
+        this.parentLayer = parentLayer
         reset()
     }
 
@@ -72,5 +75,20 @@ class DankNeuron(val parentLayer: DankLayer) {
 
         output = DankNetwork.activationFunction(totalInput)
         return output
+    }
+
+    fun copyTo(neuron: DankNeuron): DankNeuron {
+        neuron.bias = bias
+
+        neuron.totalInput = totalInput
+        neuron.output = output
+
+        neuron.outputDerivative = outputDerivative
+        neuron.inputDerivative = inputDerivative
+
+        neuron.accumulatedInputDerivative = accumulatedInputDerivative
+        neuron.numberAccumulatedDerivatives = numberAccumulatedDerivatives
+
+        return neuron
     }
 }

@@ -4,8 +4,7 @@ import net.dankrushen.danknn.dankgraphics.DankImageGrid
 import net.dankrushen.danknn.dankgraphics.DankImageGrid.AutoSpacingType
 import net.dankrushen.danknn.danklayers.DankLayer
 import net.dankrushen.danknn.danklayers.IDankOutputLayer
-import net.dankrushen.danknn.extensions.getStringBounds
-import net.dankrushen.danknn.extensions.usesAntialiasing
+import net.dankrushen.danknn.extensions.*
 import java.awt.*
 import java.awt.image.BufferedImage
 import java.math.RoundingMode
@@ -79,7 +78,7 @@ class DankNetworkVisualizer {
         return false
     }
 
-    fun drawImage(): BufferedImage {
+    fun drawImage(network: DankNetwork, extraData: String = ""): BufferedImage {
         val image = BufferedImage(imageGrid.width, imageGrid.height, BufferedImage.TYPE_INT_ARGB)
         val graphics = image.createGraphics()
 
@@ -101,6 +100,14 @@ class DankNetworkVisualizer {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
         val decimalFormat = DecimalFormat("0.00000")
         decimalFormat.roundingMode = RoundingMode.CEILING
+
+        graphics.stroke = BasicStroke(1f)
+        graphics.color = Color.BLUE
+        connectionImageGrid.drawGridLines(graphics)
+
+        graphics.stroke = BasicStroke(1f)
+        graphics.color = Color.RED
+        imageGrid.drawGridLines(graphics)
 
         for (x in 0 until Math.max(imageGrid.columns, connectionImageGrid.columns)) {
             val layer: DankLayer
@@ -128,17 +135,18 @@ class DankNetworkVisualizer {
 
                         val neuron = layer.neurons[y]
 
-                        drawOvalInternalBorder(graphics, Color.LIGHT_GRAY, Color(Math.min(1f, Math.max(0f, neuron.bias.toFloat())), 0f, 0f), strokeWidth, drawSpace)
+                        drawOvalInternalBorder(graphics, Color.LIGHT_GRAY, Color(Math.min(1f, Math.max(0f, neuron.bias.toFloat() / 3f)), 0f, -Math.min(0f, Math.max(-1f, neuron.bias.toFloat() / 3f))), strokeWidth, drawSpace)
 
                         val neuronValue = neuron.output
                         val neuronText = decimalFormat.format(neuronValue)
 
                         graphics.font = graphics.font.deriveFont(25f)
-
-                        val stringBounds = graphics.getStringBounds(neuronText)
-
                         graphics.color = Color.BLACK
-                        graphics.drawString(neuronText, Math.floor(drawSpace.centerX).toInt() - Math.floorDiv(stringBounds.width, 2), Math.floor(drawSpace.centerY).toInt() + Math.floorDiv(stringBounds.height, 2))
+
+                        val stringGlyphVector = graphics.getStringGlyphVector(neuronText)
+                        val stringBounds = stringGlyphVector.getPixelBounds()
+
+                        graphics.drawGlyphVector(stringGlyphVector, Math.floor(drawSpace.centerX).toInt() - Math.floorDiv(stringBounds.width, 2), Math.floor(drawSpace.centerY).toInt() + Math.floorDiv(stringBounds.height, 2))
 
                         // Draw line to connection
                         graphics.clip = null
@@ -165,11 +173,12 @@ class DankNetworkVisualizer {
                         val connectionText = decimalFormat.format(connection.weight)
 
                         graphics.font = graphics.font.deriveFont(25f)
-
-                        val stringBounds = graphics.getStringBounds(connectionText)
-
                         graphics.color = Color.BLACK
-                        graphics.drawString(connectionText, Math.floor(drawSpace.centerX).toInt() - Math.floorDiv(stringBounds.width, 2), Math.floor(drawSpace.centerY).toInt() + Math.floorDiv(stringBounds.height, 2))
+
+                        val stringGlyphVector = graphics.getStringGlyphVector(connectionText)
+                        val stringBounds = stringGlyphVector.getPixelBounds()
+
+                        graphics.drawGlyphVector(stringGlyphVector, Math.floor(drawSpace.centerX).toInt() - Math.floorDiv(stringBounds.width, 2), Math.floor(drawSpace.centerY).toInt() + Math.floorDiv(stringBounds.height, 2))
                     }
                 }
             }
@@ -177,13 +186,22 @@ class DankNetworkVisualizer {
 
         graphics.clip = null
 
-        graphics.stroke = BasicStroke(1f)
-        graphics.color = Color.BLUE
-        connectionImageGrid.drawGridLines(graphics)
+        if (extraData != "") {
+            graphics.font = graphics.font.deriveFont(20f)
 
-        graphics.stroke = BasicStroke(1f)
-        graphics.color = Color.RED
-        imageGrid.drawGridLines(graphics)
+            val stringGlyphVector = graphics.getStringGlyphVector(extraData)
+            val stringBounds = stringGlyphVector.getPixelBounds()
+
+            graphics.stroke = BasicStroke(5f)
+            graphics.color = Color.BLACK
+
+            var shape = stringGlyphVector.outline
+            graphics.draw(shape, 0, stringBounds.height)
+
+            graphics.color = Color.WHITE
+
+            graphics.drawGlyphVector(stringGlyphVector, 0, stringBounds.height)
+        }
 
         graphics.dispose()
 
@@ -194,6 +212,22 @@ class DankNetworkVisualizer {
         }
 
         return image
+    }
+
+    fun drawImage(extraData: String = ""): BufferedImage {
+        return drawImage(network, extraData)
+    }
+
+    fun drawImageAsync(network: DankNetwork, extraData: String = "") {
+        val networkClone = network.clone()
+
+        Thread {
+            drawImage(networkClone, extraData)
+        }.start()
+    }
+
+    fun drawImageAsync(extraData: String = "") {
+        drawImageAsync(network, extraData)
     }
 
     private fun drawOvalInternalBorder(graphics2D: Graphics2D, innerColour: Color, outerColour: Color, thickness: Int, x: Int, y: Int, width: Int, height: Int) {
