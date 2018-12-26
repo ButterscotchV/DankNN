@@ -3,15 +3,18 @@ package net.dankrushen.danknn
 import net.dankrushen.danknn.dankgraphics.DankImageGrid
 import net.dankrushen.danknn.dankgraphics.DankImageGrid.AutoSpacingType
 import net.dankrushen.danknn.danklayers.DankLayer
+import net.dankrushen.danknn.danklayers.IDankInputLayer
 import net.dankrushen.danknn.danklayers.IDankOutputLayer
 import net.dankrushen.danknn.extensions.*
 import java.awt.*
+import java.awt.geom.Line2D
 import java.awt.image.BufferedImage
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import javax.swing.ImageIcon
 import javax.swing.JFrame
 import javax.swing.JLabel
+import kotlin.math.roundToInt
 
 class DankNetworkVisualizer {
     var imageGrid: DankImageGrid
@@ -20,6 +23,8 @@ class DankNetworkVisualizer {
 
     private var displayWindow: JFrame? = null
     private var imageDisplay: JLabel? = null
+
+    var neuronBorderWidthPercent = 6.5
 
     constructor(network: DankNetwork) {
         this.network = network
@@ -94,8 +99,8 @@ class DankNetworkVisualizer {
 
         connectionImageGrid.rows = connectionRowCount
         connectionImageGrid.autoSpacingType = AutoSpacingType.NONE
-
-        val strokeWidth = 6
+        connectionImageGrid.setColumnSpacingPercent(35.0)
+        connectionImageGrid.setRowSpacingPercent(30.0)
 
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
         val decimalFormat = DecimalFormat("0.00000")
@@ -110,8 +115,9 @@ class DankNetworkVisualizer {
         imageGrid.drawGridLines(graphics)
 
         for (x in 0 until Math.max(imageGrid.columns, connectionImageGrid.columns)) {
-            val layer: DankLayer
+            var layer: DankLayer
             var outputLayer: IDankOutputLayer? = null
+            var inputLayer: IDankInputLayer? = null
             val neuronLayer = x % 2 == 0
 
             if (neuronLayer) {
@@ -119,6 +125,9 @@ class DankNetworkVisualizer {
             } else {
                 layer = network.getLayers()[(x + 1) / 2]
                 outputLayer = layer as IDankOutputLayer
+
+                layer = network.getLayers()[(x - 1) / 2]
+                inputLayer = layer as IDankInputLayer
             }
 
             for (y in 0 until Math.max(imageGrid.rows, connectionImageGrid.rows)) {
@@ -135,7 +144,10 @@ class DankNetworkVisualizer {
 
                         val neuron = layer.neurons[y]
 
-                        drawOvalInternalBorder(graphics, Color.LIGHT_GRAY, Color(Math.min(1f, Math.max(0f, neuron.bias.toFloat() / 3f)), 0f, -Math.min(0f, Math.max(-1f, neuron.bias.toFloat() / 3f))), strokeWidth, drawSpace)
+                        val maxMinBias = getMostDistantBias(network).toFloat()
+                        val biasColour = Color(Math.min(1f, Math.max(0f, neuron.bias.toFloat() / maxMinBias)), 0f, -Math.min(0f, Math.max(-1f, neuron.bias.toFloat() / maxMinBias)))
+                        val borderThickness = Math.floor(Math.min(drawSpace.width, drawSpace.height) * (neuronBorderWidthPercent / 100.0)).roundToInt()
+                        drawOvalInternalBorder(graphics, Color.LIGHT_GRAY, biasColour, borderThickness, drawSpace)
 
                         val neuronValue = neuron.output
                         val neuronText = decimalFormat.format(neuronValue)
@@ -147,29 +159,41 @@ class DankNetworkVisualizer {
                         val stringBounds = stringGlyphVector.getPixelBounds()
 
                         graphics.drawGlyphVector(stringGlyphVector, Math.floor(drawSpace.centerX).toInt() - Math.floorDiv(stringBounds.width, 2), Math.floor(drawSpace.centerY).toInt() + Math.floorDiv(stringBounds.height, 2))
-
-                        // Draw line to connection
-                        graphics.clip = null
-                        for (i in 0 until neuron.outputConnections.size) {
-                            val connectionDrawSpace = imageGrid.getDrawSpaceAt(x, y)
-
-                            graphics.stroke = BasicStroke(3f)
-                            graphics.color = Color.DARK_GRAY
-
-                            graphics.stroke = BasicStroke(1f)
-                            graphics.color = Color.LIGHT_GRAY
-                        }
                     }
                 } else { // Draw connection layer every even x column
                     if (y >= connectionImageGrid.rows)
                         continue
 
                     val drawSpace = connectionImageGrid.getDrawSpaceAt(x, y)
-                    graphics.clip = drawSpace
 
                     if (y < outputLayer!!.inputConnections.size) {
                         val connection = outputLayer.inputConnections[y]
 
+                        // Draw the connection lines
+                        graphics.clip = null
+                        val sourceNeuronDrawSpace = imageGrid.getDrawSpaceAt(x - 1, inputLayer!!.neurons.indexOf(connection.sourceNeuron))
+                        val destNeuronDrawSpace = imageGrid.getDrawSpaceAt(x + 1, outputLayer!!.neurons.indexOf(connection.destNeuron))
+
+                        val inLine = Line2D.Double(sourceNeuronDrawSpace.maxX, sourceNeuronDrawSpace.centerY, drawSpace.minX, drawSpace.centerY)
+                        val outLine = Line2D.Double(drawSpace.maxX, drawSpace.centerY, destNeuronDrawSpace.minX, destNeuronDrawSpace.centerY)
+
+                        graphics.stroke = BasicStroke(6f)
+                        graphics.color = Color.DARK_GRAY
+                        graphics.draw(inLine)
+
+                        graphics.stroke = BasicStroke(2f)
+                        graphics.color = Color.LIGHT_GRAY
+                        graphics.draw(inLine)
+
+                        graphics.stroke = BasicStroke(6f)
+                        graphics.color = Color.DARK_GRAY
+                        graphics.draw(outLine)
+
+                        graphics.stroke = BasicStroke(2f)
+                        graphics.color = Color.LIGHT_GRAY
+                        graphics.draw(outLine)
+
+                        graphics.clip = drawSpace
                         val connectionText = decimalFormat.format(connection.weight)
 
                         graphics.font = graphics.font.deriveFont(25f)
@@ -212,6 +236,19 @@ class DankNetworkVisualizer {
         }
 
         return image
+    }
+
+    private fun getMostDistantBias(network: DankNetwork): Double {
+        var highestVal = 0.0
+
+        for (layer in network.getLayers()) {
+            for (neuron in layer.neurons) {
+                if (Math.abs(neuron.bias) > Math.abs(highestVal))
+                    highestVal = neuron.bias
+            }
+        }
+
+        return highestVal
     }
 
     fun drawImage(extraData: String = ""): BufferedImage {

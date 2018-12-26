@@ -5,8 +5,6 @@ import net.dankrushen.danknn.danklayers.IDankOutputLayer
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
-import java.math.RoundingMode
-import java.text.DecimalFormat
 import java.util.*
 import javax.imageio.ImageIO
 import javax.swing.JFrame
@@ -22,7 +20,7 @@ class DankNN {
 
         network.setBias(0.1)
 
-        val visualizer = DankNetworkVisualizer(network, 1280, 720)
+        val visualizer = DankNetworkVisualizer(network, 1920, 720)
 
         visualizer.imageGrid.autoSpacingType = DankImageGrid.AutoSpacingType.SQUARE_PLUS_PERCENT
         visualizer.imageGrid.extraAutoSpacingPercent = 15.0
@@ -33,7 +31,7 @@ class DankNN {
         visualizer.drawImage()
         visualizer.centerDisplay()
 
-        val trainingSetLength = 100000
+        val trainingSetLength = 250
         val expectedInOutsList = mutableListOf<Array<DoubleArray>>()
 
         println("Generating dataset with $trainingSetLength points...")
@@ -54,34 +52,33 @@ class DankNN {
                 if (matches) {
                     expectedInOutsList.add(arrayOf(doubleArrayOf(x, y), doubleArrayOf((if (positive) 1.0 else 0.0))))
 
-                    println((if (positive) "Positive" else "Negative") + " point at (" + x + ", " + y + ")")
+                    //println((if (positive) "Positive" else "Negative") + " point at (" + x + ", " + y + ")")
                 }
             }
         }
 
         val expectedInOuts = expectedInOutsList.toTypedArray()
+        expectedInOutsList.clear()
 
         println("Dataset generated!")
 
         println()
 
-        var loss: Double
-        var epochLoss: Double
+        var loss = -1.0
+        var epochLoss = -1.0
 
         var epochs = 0
         var epochIters = 0
 
         val initTime = System.nanoTime()
         var lastTime = initTime
+        var timeAccumulator = 0.0
 
         val timeDivisor = 1000000000.0
 
         var learningRate = 0.03
 
-        val formatter = DecimalFormat("0.000")
-        formatter.roundingMode = RoundingMode.CEILING
-
-        while (epochs < 500) {
+        while (epochs < 10000) {
             epochLoss = 0.0
 
             for (expectedInOut in shuffleDataset(expectedInOuts)) {
@@ -96,6 +93,8 @@ class DankNN {
                 val curTime = System.nanoTime()
                 val deltaTime = curTime - lastTime
                 lastTime = curTime
+
+                timeAccumulator += deltaTime
 
                 if (epochIters % 500 == 0 || epochIters >= expectedInOuts.size) {
                     if (false) { // Debugging actual network
@@ -120,19 +119,21 @@ class DankNN {
                         }
                     }
 
-                    //visualizer.drawImageAsync("Loss: ${formatter.format(loss)}")
-
                     println("Iters = " + epochIters + "/" + expectedInOuts.size + ", Epochs = " + epochs + ", Loss = " + loss + ", Time/Iter = " + deltaTime / timeDivisor + ", Total Time = " + (curTime - initTime) / timeDivisor)
                 }
             }
 
             epochs++
-            epochLoss /= epochIters.toDouble()
+            epochLoss /= epochIters
             epochIters = 0
 
-            visualizer.drawImageAsync("Epoch Loss: ${formatter.format(epochLoss)}")
+            //learningRate *= 0.995
 
-            learningRate *= 0.985
+            if ((timeAccumulator / timeDivisor) >= 0.5) {
+                timeAccumulator = 0.0
+                visualizer.drawImageAsync("Epoch Loss: $epochLoss")
+                //saveImage(visualizer.drawImage("Epoch Loss: $epochLoss"))
+            }
 
             println("Epoch Loss = $epochLoss")
             println()
@@ -144,10 +145,6 @@ class DankNN {
         println("Point: (" + inputs[0] + ", " + inputs[1] + ")")
         println("Group (+1 or -1): " + outputs[0])
         println()
-    }
-
-    private fun pythagoreanTheorem(a: Double, b: Double): Double {
-        return Math.sqrt(Math.pow(a, 2.0) + Math.pow(b, 2.0))
     }
 
     companion object {
@@ -182,6 +179,10 @@ class DankNN {
                 e.printStackTrace()
             }
 
+        }
+
+        private fun pythagoreanTheorem(a: Double, b: Double): Double {
+            return Math.sqrt(Math.pow(a, 2.0) + Math.pow(b, 2.0))
         }
 
         fun testOnExample() {

@@ -1,9 +1,9 @@
 package net.dankrushen.danknn.dankgraphics
 
-import net.dankrushen.danknn.extensions.drawLine
 import java.awt.Graphics2D
 import java.awt.Rectangle
 import java.awt.geom.Line2D
+import kotlin.math.roundToInt
 
 class DankImageGrid : Cloneable {
     var width = 1280
@@ -35,11 +35,11 @@ class DankImageGrid : Cloneable {
     val squareSpacing: DankSpacing
         get() = getSquareSpacing(0)
 
-    val pixelsPerColumn: Int
-        get() = Math.floorDiv(width, columns)
+    val pixelsPerColumn: Double
+        get() = width.toDouble() / columns.toDouble()
 
-    val pixelsPerRow: Int
-        get() = Math.floorDiv(height, rows)
+    val pixelsPerRow: Double
+        get() = height.toDouble() / rows.toDouble()
 
     enum class AutoSpacingType {
         NONE,
@@ -80,18 +80,18 @@ class DankImageGrid : Cloneable {
     inner class DankSpacing(val columnSpacing: Int, val rowSpacing: Int)
 
     fun setColumnSpacingPercent(columnSpacingPercent: Double) {
-        columnSpacing = Math.round(pixelsPerColumn.toDouble() * (columnSpacingPercent / 100.0) / 2.0).toInt()
+        columnSpacing = Math.round(pixelsPerColumn * (columnSpacingPercent / 100.0) / 2.0).toInt()
     }
 
     fun setRowSpacingPercent(rowSpacingPercent: Double) {
-        rowSpacing = Math.round(pixelsPerRow.toDouble() * (rowSpacingPercent / 100.0) / 2.0).toInt()
+        rowSpacing = Math.round(pixelsPerRow * (rowSpacingPercent / 100.0) / 2.0).toInt()
     }
 
     fun getSquareSpacing(extraColumnSpacing: Int, extraRowSpacing: Int): DankSpacing {
         val minLength = Math.min(pixelsPerColumn, pixelsPerRow)
 
-        val columnSpacing = Math.floorDiv(pixelsPerColumn - minLength, 2) + extraColumnSpacing
-        val rowSpacing = Math.floorDiv(pixelsPerRow - minLength, 2) + extraRowSpacing
+        val columnSpacing = Math.floor((pixelsPerColumn - minLength) / 2.0).roundToInt() + extraColumnSpacing
+        val rowSpacing = Math.floor((pixelsPerRow - minLength) / 2.0).roundToInt() + extraRowSpacing
 
         return DankSpacing(columnSpacing, rowSpacing)
     }
@@ -103,7 +103,7 @@ class DankImageGrid : Cloneable {
     fun getSquareSpacingPercent(extraSpacingPercent: Double): DankSpacing {
         val minLength = Math.min(pixelsPerColumn, pixelsPerRow)
 
-        return getSquareSpacing(Math.round(minLength.toDouble() * (extraSpacingPercent / 100.0) / 2.0).toInt())
+        return getSquareSpacing(Math.round(minLength * (extraSpacingPercent / 100.0) / 2.0).toInt())
     }
 
     fun getDrawSpaceAt(column: Int, row: Int): Rectangle {
@@ -112,10 +112,10 @@ class DankImageGrid : Cloneable {
         val x = column * pixelsPerColumn + spacing.columnSpacing
         val y = row * pixelsPerRow + spacing.rowSpacing
 
-        val width = pixelsPerColumn - spacing.columnSpacing * 2
-        val height = pixelsPerRow - spacing.rowSpacing * 2
+        val width = pixelsPerColumn - spacing.columnSpacing * 2.0
+        val height = pixelsPerRow - spacing.rowSpacing * 2.0
 
-        return Rectangle(x, y, width, height)
+        return Rectangle(Math.floor(x).roundToInt(), Math.floor(y).roundToInt(), Math.floor(width).roundToInt(), Math.floor(height).roundToInt())
     }
 
     fun getColumnLineAt(column: Int): Line2D {
@@ -131,12 +131,12 @@ class DankImageGrid : Cloneable {
     fun drawGridLines(graphics: Graphics2D) {
         for (x in 0 until columns) {
             val line = getColumnLineAt(x)
-            graphics.drawLine(line)
+            graphics.draw(line)
         }
 
         for (y in 0 until rows) {
             val line = getRowLineAt(y)
-            graphics.drawLine(line)
+            graphics.draw(line)
         }
     }
 
