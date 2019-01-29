@@ -20,7 +20,7 @@ class DankNN {
 
         network.setBias(0.1)
 
-        val visualizer = DankNetworkVisualizer(network, 1920, 720)
+        val visualizer = DankNetworkVisualizer(network, 1280, 720)
 
         visualizer.imageGrid.autoSpacingType = DankImageGrid.AutoSpacingType.SQUARE_PLUS_PERCENT
         visualizer.imageGrid.extraAutoSpacingPercent = 15.0
@@ -76,9 +76,9 @@ class DankNN {
 
         val timeDivisor = 1000000000.0
 
-        var learningRate = 0.03
+        var learningRate = 1.0
 
-        while (epochs < 10000) {
+        while (epochs < 1000000) {
             epochLoss = 0.0
 
             for (expectedInOut in shuffleDataset(expectedInOuts)) {
