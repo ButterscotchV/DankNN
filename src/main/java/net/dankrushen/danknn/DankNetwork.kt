@@ -118,7 +118,7 @@ class DankNetwork(vararg layers: DankLayer) : Cloneable {
 
         // Set output layer errors
         for (i in outputNeurons.indices) {
-            loss += lossFunction(outputNeurons[i].outputDerivative, targets[i])
+            loss += lossFunction(outputNeurons[i].output, targets[i])
         }
 
         return loss
